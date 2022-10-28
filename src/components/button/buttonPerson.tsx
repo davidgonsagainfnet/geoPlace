@@ -1,12 +1,13 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 
 const props = {
   title: String,
   color: String,
+  textColor: String,
 };
 
-export default function ButtonPerson({title, color}: props) {
+export default function ButtonPerson({title, color, textColor}: props) {
   return (
     <View>
       <TouchableOpacity
@@ -18,16 +19,10 @@ export default function ButtonPerson({title, color}: props) {
           borderRadius: 8,
           marginBottom: 5,
         }}>
-        <Text style={style.text}>{title}</Text>
+        <Text style={{color: textColor, fontSize: 20, fontWeight: 'bold'}}>
+          {title}
+        </Text>
       </TouchableOpacity>
     </View>
   );
 }
-
-const style = StyleSheet.create({
-  text: {
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-});
