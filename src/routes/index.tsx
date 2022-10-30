@@ -3,18 +3,12 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Registration from '../pages/Registration/index';
 import MyPlace from '../pages/ListPlace/myPlace';
 import Home from '../pages/Home/home';
-import Loader from '../components/loader/loader';
 
 const Stack = createNativeStackNavigator();
 
 export default function Routes() {
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        name="Loader"
-        component={Loader}
-        options={{headerShown: false}}
-      />
       <Stack.Screen
         name="Home"
         component={Home}
