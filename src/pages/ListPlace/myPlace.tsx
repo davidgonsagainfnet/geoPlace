@@ -22,22 +22,29 @@ export default function MyPlace() {
         style={styles.containerForm}>
         <Text style={styles.title}>Meus Locais</Text>
         <ScrollView>
-          <View style={{flexDirection: 'row', with: '100%'}}>
-            <ButtonPerson
-              title={'Conhecido'}
-              color={'#B1F9AF'}
-              textColor={'#000'}
-            />
-            <ButtonPerson
-              title={'A Conhecer'}
-              color={'#F8FAA1'}
-              textColor={'#000'}
-            />
-            <ButtonPerson
-              title={'Evitar'}
-              color={'#F8B9B9'}
-              textColor={'#000'}
-            />
+          <View style={{flexDirection: 'row'}}>
+            <View style={styles.vBtFilter}>
+              <ButtonPerson
+                title={'Conhecido'}
+                color={'#B1F9AF'}
+                textColor={'#000'}
+              />
+            </View>
+            <View style={styles.vBtFilter}>
+              <ButtonPerson
+                title={'A Conhecer'}
+                color={'#F8FAA1'}
+                textColor={'#000'}
+              />
+            </View>
+            <View style={styles.vBtFilter}>
+              <ButtonPerson
+                title={'Evitar'}
+                color={'#F8B9B9'}
+                textColor={'#000'}
+                style={styles.vBtFilter}
+              />
+            </View>
           </View>
           <Card />
         </ScrollView>
@@ -82,5 +89,9 @@ const styles = StyleSheet.create({
   vButtons: {
     marginBottom: 30,
     marginTop: 15,
+  },
+  vBtFilter: {
+    flex: 1,
+    marginEnd: 5,
   },
 });
