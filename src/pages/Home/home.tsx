@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 
 export default function Home() {
   const navigation = useNavigation();
@@ -23,7 +24,16 @@ export default function Home() {
         </View>
       </View>
       <View style={style.vbody}>
-        <Text>David Mendes</Text>
+        <MapView
+          provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+          style={style.map}
+          region={{
+            latitude: 37.78825,
+            longitude: -122.4324,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.0121,
+          }}
+        />
       </View>
       <View style={style.vfoot}>
         <TouchableOpacity
@@ -89,5 +99,8 @@ const style = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#4D98DE',
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
   },
 });
