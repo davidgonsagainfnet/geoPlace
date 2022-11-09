@@ -2,18 +2,20 @@ import {createContext} from 'react';
 
 export type AppState = {
   isLoading: Boolean;
-  coordsUser: {
+  coordsFocus: {
     latitude: number;
     longitude: number;
   };
+  markers: [];
 };
 
 export const initialAppState: AppState = {
   isLoading: true,
-  coordsUser: {
+  coordsFocus: {
     latitude: 0,
     longitude: 0,
   },
+  markers: [],
 };
 
 export const AppContext = createContext({

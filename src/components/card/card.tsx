@@ -1,19 +1,36 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
-export default function Card() {
+const props = {
+  local: String,
+  cidade: String,
+  descricao: String,
+  cor: String,
+  eventDelete: String,
+  eventEdit: String,
+};
+
+export default function Card({
+  local,
+  cidade,
+  descricao,
+  cor,
+  eventDelete,
+  eventEdit,
+}: props) {
   return (
-    <View style={{backgroundColor: '#F1FCE4'}}>
-      <Text style={style.local}>Nome do Local</Text>
-      <Text style={style.cidade}>Cidade</Text>
-      <Text style={style.text}>
-        Lorem Ipsum is simply dum my text of the printing and typesetting
-        industry. Lorem Ipsum has been the indus try's standard dummy
-      </Text>
+    <View style={{backgroundColor: cor}}>
+      <Text style={style.local}>{local}</Text>
+      <Text style={style.cidade}>{cidade}</Text>
+      <Text style={style.text}>{descricao}</Text>
       <View style={style.vButtons}>
         <View style={{flexDirection: 'row', marginEnd: 15}}>
-          <Image source={require('../../assets/edit.png')} />
-          <Image source={require('../../assets/lixeira.png')} />
+          <TouchableOpacity onPress={eventEdit}>
+            <Image source={require('../../assets/edit.png')} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={eventDelete}>
+            <Image source={require('../../assets/lixeira.png')} />
+          </TouchableOpacity>
         </View>
       </View>
     </View>

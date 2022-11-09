@@ -1,10 +1,65 @@
-import React from 'react';
-import {Text, View, StyleSheet, ScrollView} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Text, View, StyleSheet, ScrollView, Alert} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import ButtonPerson from '../../components/button/buttonPerson';
 import Card from '../../components/card/card';
+import {AppContext} from '../../app/AppContext';
+import styled from 'styled-components/native';
+import {useNavigation} from '@react-navigation/native';
 
 export default function MyPlace() {
+  const [arrayExibir, setArrayExibir] = useState([]);
+  const navigation = useNavigation();
+
+  const SpaceCard = styled.View`
+    margin: 10px;
+  `;
+
+  useEffect(() => {
+    setArrayExibir(AppContext._currentValue.appState.markers);
+  }, []);
+
+  useEffect(() => {
+    AppContext._currentValue.appState.markers = arrayExibir;
+  }, [arrayExibir]);
+
+  function delet(key) {
+    Alert.alert('Apagar Local', 'Deseja Apagar esse local?', [
+      {
+        text: 'Cancelar',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'APAGAR',
+        onPress: () => {
+          const arrayApagar = arrayExibir.filter(p => {
+            return p.key !== key;
+          });
+          setArrayExibir(arrayApagar);
+        },
+      },
+    ]);
+  }
+
+  function edit(key) {
+    const arrayFilter = arrayExibir.filter(p => {
+      return p.key === key;
+    });
+    console.log(arrayFilter);
+    let place = {
+      latitude: parseFloat(arrayFilter[0].latitude),
+      longitude: parseFloat(arrayFilter[0].longtitude),
+      edit: true,
+      rua: arrayFilter.rua,
+      estado: arrayFilter.estado,
+      cidade: arrayFilter.cidade,
+      corMarker: arrayFilter.corMarker,
+      descricao: arrayFilter.descricao,
+    };
+    navigation.navigate('Registration', place);
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.containerLogo}>
@@ -46,7 +101,19 @@ export default function MyPlace() {
               />
             </View>
           </View>
-          <Card />
+          {arrayExibir &&
+            arrayExibir.map(o => (
+              <SpaceCard>
+                <Card
+                  local={o.estado}
+                  cidade={o.cidade}
+                  descricao={o.descricao}
+                  cor={o.corMarker}
+                  eventDelete={() => delet(o.key)}
+                  eventEdit={() => edit(o.key)}
+                />
+              </SpaceCard>
+            ))}
         </ScrollView>
       </Animatable.View>
     </View>

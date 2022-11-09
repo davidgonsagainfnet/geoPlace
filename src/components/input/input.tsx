@@ -5,7 +5,12 @@ export default function InputText(props) {
   return (
     <View>
       <Text style={styles.titleinput}>{props.title}</Text>
-      <TextInput style={styles.input} placeholder={props.placeholder} />
+      <TextInput
+        style={styles.input}
+        placeholder={props.placeholder}
+        value={props.value}
+        onChangeText={props.ChangeText}
+      />
     </View>
   );
 }

@@ -4,9 +4,10 @@ import {View, Text, StyleSheet, TextInput} from 'react-native';
 const props = {
   title: String,
   placeholder: String,
+  ChangeText: String,
 };
 
-export default function TextArea({title, placeholder}: props) {
+export default function TextArea({title, placeholder, ChangeText}: props) {
   return (
     <View>
       <Text style={styles.titleinput}>{title}</Text>
@@ -15,6 +16,7 @@ export default function TextArea({title, placeholder}: props) {
         placeholder={placeholder}
         multiline
         numberOfLines={4}
+        onChangeText={ChangeText}
       />
     </View>
   );

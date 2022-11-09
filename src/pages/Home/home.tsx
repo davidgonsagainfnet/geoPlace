@@ -1,10 +1,68 @@
-import React from 'react';
-import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  PermissionsAndroid,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import Geolocation from '@react-native-community/geolocation';
+import {AppContext} from '../../app/AppContext';
 
 export default function Home() {
+  const [region, setRegion] = useState(null);
+  const [focusLatitude, setFocusLatitude] = useState(0);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    init();
+  }, []);
+
+  useEffect(() => {
+    init();
+  }, [focusLatitude]);
+
+  function init() {
+    if (AppContext._currentValue.appState.coordsFocus.latitude === 0) {
+      positionDevice();
+    } else {
+      setRegion({
+        latitude: AppContext._currentValue.appState.coordsFocus.latitude,
+        longitude: AppContext._currentValue.appState.coordsFocus.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
+    }
+  }
+
+  function positionDevice() {
+    Geolocation.getCurrentPosition(info => {
+      setRegion({
+        latitude: info.coords.latitude,
+        longitude: info.coords.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
+    });
+  }
+
+  function locationEvent(p) {
+    setFocusLatitude(p.nativeEvent.coordinate.latitude);
+    AppContext._currentValue.appState.coordsFocus.latitude =
+      p.nativeEvent.coordinate.latitude;
+    AppContext._currentValue.appState.coordsFocus.longitude =
+      p.nativeEvent.coordinate.longitude;
+    let place = {
+      latitude: p.nativeEvent.coordinate.latitude,
+      longitude: p.nativeEvent.coordinate.longitude,
+      edit: false,
+    };
+    navigation.navigate('Registration', place);
+  }
+
   return (
     <>
       <View style={style.vtop}>
@@ -25,14 +83,19 @@ export default function Home() {
       </View>
       <View style={style.vbody}>
         <MapView
-          provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-          style={style.map}
-          region={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.015,
-            longitudeDelta: 0.0121,
+          onMapReady={() => {
+            PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            ).then(() => {
+              console.log('USUARIO ACESSOU');
+            });
           }}
+          provider={PROVIDER_GOOGLE}
+          style={style.map}
+          region={region}
+          showsUserLocation={true}
+          loadingEnabled={true}
+          onPress={e => locationEvent(e)}
         />
       </View>
       <View style={style.vfoot}>
