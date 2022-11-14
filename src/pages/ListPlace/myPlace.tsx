@@ -51,11 +51,12 @@ export default function MyPlace() {
       latitude: parseFloat(arrayFilter[0].latitude),
       longitude: parseFloat(arrayFilter[0].longtitude),
       edit: true,
-      rua: arrayFilter.rua,
-      estado: arrayFilter.estado,
-      cidade: arrayFilter.cidade,
-      corMarker: arrayFilter.corMarker,
-      descricao: arrayFilter.descricao,
+      rua: arrayFilter[0].rua,
+      estado: arrayFilter[0].estado,
+      cidade: arrayFilter[0].cidade,
+      corMarker: arrayFilter[0].corMarker,
+      descricao: arrayFilter[0].descricao,
+      key: key,
     };
     navigation.navigate('Registration', place);
   }

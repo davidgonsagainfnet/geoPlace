@@ -11,6 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import {AppContext} from '../../app/AppContext';
+import mapStyle from '../../mapStyle.json';
 
 export default function Home() {
   const [region, setRegion] = useState(null);
@@ -94,6 +95,7 @@ export default function Home() {
           style={style.map}
           region={region}
           showsUserLocation={true}
+          //customMapStyle={mapStyle}
           loadingEnabled={true}
           onPress={e => locationEvent(e)}
         />

@@ -29,6 +29,8 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
   const [descricao, setDescricao] = useState('');
   const [corMarker, setCorMarker] = useState('');
   const [escolhaStatus, setEscolhaStatus] = useState(false);
+  const [editar, setEditar] = useState(false);
+  const [editKey, setEditKey] = useState(0);
   const navigation = useNavigation();
 
   function setStatus(status) {
@@ -101,11 +103,50 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
     navigation.navigate('Home');
   }
 
+  function bteditar(key2) {
+    const arrayOriginal = AppContext._currentValue.appState.markers;
+    let arrayTemp = arrayOriginal.filter(p => {
+      return p.key !== key2;
+    });
+
+    let arrayEdit = [
+      ...arrayTemp,
+      {
+        key: key2,
+        latitude: latitude,
+        longtitude: longtitude,
+        rua: rua,
+        cidade: cidade,
+        descricao: descricao,
+        estado: estado,
+        corMarker: corMarker,
+      },
+    ];
+
+    AppContext._currentValue.appState.markers = arrayEdit;
+    console.log(AppContext._currentValue.appState.markers);
+    navigation.navigate('Home');
+  }
+
   useEffect(() => {
     setLatitude(JSON.stringify(route.params.latitude, undefined, 2));
     setLongtitude(JSON.stringify(route.params.longitude, undefined, 2));
-    if (typeof route.params.longitude !== 'undefined') {
-      setRua(JSON.stringify(route.params.rua, undefined, 2));
+    if (typeof route.params.rua !== 'undefined') {
+      setRua(route.params.rua);
+      setCidade(route.params.cidade);
+      setEstado(route.params.estado);
+      setDescricao(route.params.descricao);
+      const cor =
+        route.params.corMarker === '#4DDEA1'
+          ? 'cc'
+          : route.params.corMarker === '#4D98DE'
+          ? 'cr'
+          : 'e';
+      setStatus(cor);
+      setEditar(true);
+      setEditKey(route.params.key);
+      console.log('####################');
+      console.log(route.params.key);
     }
   }, []);
 
@@ -189,9 +230,15 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
           </View>
           <View style={styles.vButtons}>
             <ButtonPerson
-              title={'Salvar Local'}
+              title={editar ? 'Editar Local' : 'Salvar Local'}
               color={'#4D98DE'}
-              press={() => salvar()}
+              press={() => {
+                if (editar) {
+                  bteditar(editKey);
+                } else {
+                  salvar();
+                }
+              }}
             />
           </View>
         </ScrollView>

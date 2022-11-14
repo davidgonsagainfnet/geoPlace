@@ -5,9 +5,15 @@ const props = {
   title: String,
   placeholder: String,
   ChangeText: String,
+  value: String,
 };
 
-export default function TextArea({title, placeholder, ChangeText}: props) {
+export default function TextArea({
+  title,
+  placeholder,
+  ChangeText,
+  value,
+}: props) {
   return (
     <View>
       <Text style={styles.titleinput}>{title}</Text>
@@ -17,6 +23,7 @@ export default function TextArea({title, placeholder, ChangeText}: props) {
         multiline
         numberOfLines={4}
         onChangeText={ChangeText}
+        value={value}
       />
     </View>
   );
