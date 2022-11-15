@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {
   View,
   Text,
@@ -19,6 +19,7 @@ import {useNavigation} from '@react-navigation/native';
 import cep from '../../api/cep';
 
 export default function Registration({route}: ScreenStackProps<ParamListBase>) {
+  const {appState, setAppState} = useContext(AppContext);
   const [latitude, setLatitude] = useState('');
   const [longtitude, setLongtitude] = useState('');
   const [conhecer, setConhecer] = useState(false);
@@ -86,7 +87,7 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
       return;
     }
 
-    const arrayOriginal = AppContext._currentValue.appState.markers;
+    const arrayOriginal = appState.markers;
     let arrayTemp = [
       ...arrayOriginal,
       {
@@ -100,13 +101,17 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
         corMarker: corMarker,
       },
     ];
-    AppContext._currentValue.appState.markers = arrayTemp;
-    console.log(AppContext._currentValue.appState.markers);
+
+    setAppState({
+      ...appState,
+      markers: arrayTemp,
+    });
+    console.log(arrayTemp);
     navigation.navigate('Home');
   }
 
   function bteditar(key2) {
-    const arrayOriginal = AppContext._currentValue.appState.markers;
+    const arrayOriginal = appState.markers;
     let arrayTemp = arrayOriginal.filter(p => {
       return p.key !== key2;
     });
@@ -125,8 +130,11 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
       },
     ];
 
-    AppContext._currentValue.appState.markers = arrayEdit;
-    console.log(AppContext._currentValue.appState.markers);
+    setAppState({
+      ...appState,
+      markers: arrayEdit,
+    });
+    console.log(arrayEdit);
     navigation.navigate('Home');
   }
 

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
   View,
@@ -14,7 +14,8 @@ import {AppContext} from '../../app/AppContext';
 import mapStyle from '../../mapStyle.json';
 
 export default function Home() {
-  const [region, setRegion] = useState(null);
+  const {appState, setAppState} = useContext(AppContext);
+  const [region, setRegion] = useState(undefined);
   const [focusLatitude, setFocusLatitude] = useState(0);
   const navigation = useNavigation();
   const [makersTela, setMakersTela] = useState([]);
@@ -34,21 +35,25 @@ export default function Home() {
   }, [focusLatitude]);
 
   useEffect(() => {
+    setMakersTela([...appState.markers]);
+  }, [appState.markers]);
+
+  useEffect(() => {
     positionDevice();
   }, [makersTela]);
 
   function init() {
-    if (AppContext._currentValue.appState.coordsFocus.latitude === 0) {
+    if (appState.coordsFocus.latitude === 0) {
       positionDevice();
     } else {
       setRegion({
-        latitude: AppContext._currentValue.appState.coordsFocus.latitude,
-        longitude: AppContext._currentValue.appState.coordsFocus.longitude,
+        latitude: appState.coordsFocus.latitude,
+        longitude: appState.coordsFocus.longitude,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       });
     }
-    setMakersTela(Object.values(AppContext._currentValue.appState.markers));
+    setMakersTela([...appState.markers]);
     console.log('chamou');
   }
 
@@ -65,10 +70,10 @@ export default function Home() {
 
   function locationEvent(p) {
     setFocusLatitude(p.nativeEvent.coordinate.latitude);
-    AppContext._currentValue.appState.coordsFocus.latitude =
-      p.nativeEvent.coordinate.latitude;
-    AppContext._currentValue.appState.coordsFocus.longitude =
-      p.nativeEvent.coordinate.longitude;
+    setAppState({
+      ...appState,
+      coordsFocus: p.nativeEvent.coordinate,
+    });
     let place = {
       latitude: p.nativeEvent.coordinate.latitude,
       longitude: p.nativeEvent.coordinate.longitude,
@@ -154,7 +159,7 @@ export default function Home() {
       <View style={style.vfoot}>
         <TouchableOpacity
           style={style.vbtfootleft}
-          onPress={() => navigation.navigate('Registration')}>
+          onPress={() => navigation.navigate('Registration', {})}>
           <Image source={require('../../assets/gmappoint.png')} />
         </TouchableOpacity>
         <TouchableOpacity

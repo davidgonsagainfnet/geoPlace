@@ -6,7 +6,7 @@ export type AppState = {
     latitude: number;
     longitude: number;
   };
-  markers: [];
+  markers: Array<any>;
 };
 
 export const initialAppState: AppState = {

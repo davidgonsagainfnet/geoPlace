@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {Text, View, StyleSheet, ScrollView, Alert} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import ButtonPerson from '../../components/button/buttonPerson';
@@ -8,7 +8,8 @@ import styled from 'styled-components/native';
 import {useNavigation} from '@react-navigation/native';
 
 export default function MyPlace() {
-  const [arrayExibir, setArrayExibir] = useState([]);
+  const {appState, setAppState} = useContext(AppContext);
+  const [arrayExibir, setArrayExibir] = useState<Array<any>>([]);
   const navigation = useNavigation();
 
   const SpaceCard = styled.View`
@@ -16,11 +17,14 @@ export default function MyPlace() {
   `;
 
   useEffect(() => {
-    setArrayExibir(AppContext._currentValue.appState.markers);
+    setArrayExibir(appState.markers);
   }, []);
 
   useEffect(() => {
-    AppContext._currentValue.appState.markers = arrayExibir;
+    setAppState({
+      ...appState,
+      markers: arrayExibir,
+    });
   }, [arrayExibir]);
 
   function delet(key) {
@@ -104,7 +108,7 @@ export default function MyPlace() {
           </View>
           {arrayExibir &&
             arrayExibir.map(o => (
-              <SpaceCard>
+              <SpaceCard key={o.key}>
                 <Card
                   local={o.estado}
                   cidade={o.cidade}
