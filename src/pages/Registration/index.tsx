@@ -16,6 +16,7 @@ import type {ScreenStackProps} from 'react-native-screens';
 import type {ParamListBase} from '@react-navigation/native';
 import {AppContext} from '../../app/AppContext';
 import {useNavigation} from '@react-navigation/native';
+import cep from '../../api/cep';
 
 export default function Registration({route}: ScreenStackProps<ParamListBase>) {
   const [latitude, setLatitude] = useState('');
@@ -32,6 +33,7 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
   const [editar, setEditar] = useState(false);
   const [editKey, setEditKey] = useState(0);
   const navigation = useNavigation();
+  const [findCep, setFindCep] = useState('');
 
   function setStatus(status) {
     setConhecer(false);
@@ -145,10 +147,23 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
       setStatus(cor);
       setEditar(true);
       setEditKey(route.params.key);
-      console.log('####################');
-      console.log(route.params.key);
     }
   }, []);
+
+  async function buscarCep() {
+    if (findCep !== '') {
+      await cep.get('/' + findCep + '/json/').then(response => {
+        console.log(response.data);
+        setRua(response.data.logradouro);
+        setCidade(response.data.localidade);
+        setEstado(response.data.uf);
+      });
+    } else {
+      Alert.alert('Cep', 'Informe um cep para buscar', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -178,7 +193,24 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
             value={latitude}
           />
           <ButtonPerson title={'Buscar por coordenadas'} color={'#4DDEA1'} />
-          <ButtonPerson title={'Informar o cep'} color={'#DBDE4D'} />
+          <View style={styles.vBuscaCep}>
+            <View style={styles.vViewCep}>
+              <InputText
+                title={'Cep'}
+                placeholder={'Informe um cep'}
+                ChangeText={setFindCep}
+              />
+            </View>
+            <View style={styles.vViewCep}>
+              <ButtonPerson
+                title={'Informar o cep'}
+                color={'#DBDE4D'}
+                press={() => {
+                  buscarCep();
+                }}
+              />
+            </View>
+          </View>
           <InputText
             title={'Rua'}
             placeholder={'Informe a Rua'}
@@ -282,5 +314,14 @@ const styles = StyleSheet.create({
   },
   vButtons: {
     marginTop: 50,
+  },
+  vBuscaCep: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  vViewCep: {
+    flex: 1,
+    justifyContent: 'center',
   },
 });

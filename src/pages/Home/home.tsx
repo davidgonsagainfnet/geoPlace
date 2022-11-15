@@ -8,7 +8,7 @@ import {
   PermissionsAndroid,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import {AppContext} from '../../app/AppContext';
 import mapStyle from '../../mapStyle.json';
@@ -17,6 +17,7 @@ export default function Home() {
   const [region, setRegion] = useState(null);
   const [focusLatitude, setFocusLatitude] = useState(0);
   const navigation = useNavigation();
+  const [makersTela, setMakersTela] = useState([]);
 
   useEffect(() => {
     init();
@@ -37,6 +38,7 @@ export default function Home() {
         longitudeDelta: 0.0421,
       });
     }
+    setMakersTela(AppContext._currentValue.appState.markers);
   }
 
   function positionDevice() {
@@ -97,8 +99,17 @@ export default function Home() {
           showsUserLocation={true}
           //customMapStyle={mapStyle}
           loadingEnabled={true}
-          onPress={e => locationEvent(e)}
-        />
+          onPress={e => locationEvent(e)}>
+          {makersTela.map(p => {
+            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+            console.log(p.key);
+            <Marker.Animated
+              coordinate={{latitude: p.latitude, longitude: p.longtitude}}
+              key={p.key}
+              pinColor={'purple'}
+            />;
+          })}
+        </MapView>
       </View>
       <View style={style.vfoot}>
         <TouchableOpacity
