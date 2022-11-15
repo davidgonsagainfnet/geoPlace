@@ -18,14 +18,24 @@ export default function Home() {
   const [focusLatitude, setFocusLatitude] = useState(0);
   const navigation = useNavigation();
   const [makersTela, setMakersTela] = useState([]);
+  const [mapStyleTime, setMapStyleTime] = useState();
 
   useEffect(() => {
     init();
+    let dataAtual = new Date();
+    let horas = dataAtual.getHours();
+    if (horas >= 19) {
+      setMapStyleTime(mapStyle);
+    }
   }, []);
 
   useEffect(() => {
     init();
   }, [focusLatitude]);
+
+  useEffect(() => {
+    positionDevice();
+  }, [makersTela]);
 
   function init() {
     if (AppContext._currentValue.appState.coordsFocus.latitude === 0) {
@@ -38,7 +48,8 @@ export default function Home() {
         longitudeDelta: 0.0421,
       });
     }
-    setMakersTela(AppContext._currentValue.appState.markers);
+    setMakersTela(Object.values(AppContext._currentValue.appState.markers));
+    console.log('chamou');
   }
 
   function positionDevice() {
@@ -62,6 +73,25 @@ export default function Home() {
       latitude: p.nativeEvent.coordinate.latitude,
       longitude: p.nativeEvent.coordinate.longitude,
       edit: false,
+    };
+    navigation.navigate('Registration', place);
+  }
+
+  function edit(key) {
+    const arrayFilter = makersTela.filter(p => {
+      return p.key === key;
+    });
+    console.log(arrayFilter);
+    let place = {
+      latitude: parseFloat(arrayFilter[0].latitude),
+      longitude: parseFloat(arrayFilter[0].longtitude),
+      edit: true,
+      rua: arrayFilter[0].rua,
+      estado: arrayFilter[0].estado,
+      cidade: arrayFilter[0].cidade,
+      corMarker: arrayFilter[0].corMarker,
+      descricao: arrayFilter[0].descricao,
+      key: key,
     };
     navigation.navigate('Registration', place);
   }
@@ -97,17 +127,27 @@ export default function Home() {
           style={style.map}
           region={region}
           showsUserLocation={true}
-          //customMapStyle={mapStyle}
+          customMapStyle={mapStyleTime}
           loadingEnabled={true}
           onPress={e => locationEvent(e)}>
           {makersTela.map(p => {
             console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
             console.log(p.key);
-            <Marker.Animated
-              coordinate={{latitude: p.latitude, longitude: p.longtitude}}
-              key={p.key}
-              pinColor={'purple'}
-            />;
+            let point = {
+              latitude: Number(p.latitude),
+              longitude: Number(p.longtitude),
+            };
+            return (
+              <Marker
+                coordinate={point}
+                key={p.key}
+                pinColor={p.corMarker}
+                description={p.descricao}
+                onPress={e => {
+                  edit(p.key);
+                }}
+              />
+            );
           })}
         </MapView>
       </View>
