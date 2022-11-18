@@ -200,7 +200,6 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
             placeholder={'Informe a Latitude'}
             value={latitude}
           />
-          <ButtonPerson title={'Buscar por coordenadas'} color={'#4DDEA1'} />
           <View style={styles.vBuscaCep}>
             <View style={styles.vViewCep}>
               <InputText

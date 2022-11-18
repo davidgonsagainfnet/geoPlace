@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
-import Geolocation from '@react-native-community/geolocation';
 import {AppContext} from '../../app/AppContext';
+import Geolocation from 'react-native-geolocation-service';
 //import mapStyle from '../../mapStyle.json';
 
 export default function Home() {
