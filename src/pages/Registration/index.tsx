@@ -87,6 +87,20 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
       return;
     }
 
+    if (latitude === '') {
+      Alert.alert('Error', 'Informe a Latitude', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+      return;
+    }
+
+    if (longtitude === '') {
+      Alert.alert('Error', 'Informe a Longitude', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+      return;
+    }
+
     const arrayOriginal = appState.markers;
     let arrayTemp = [
       ...arrayOriginal,
