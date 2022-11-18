@@ -11,7 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import {AppContext} from '../../app/AppContext';
-import mapStyle from '../../mapStyle.json';
+//import mapStyle from '../../mapStyle.json';
 
 export default function Home() {
   const {appState, setAppState} = useContext(AppContext);
@@ -19,15 +19,10 @@ export default function Home() {
   const [focusLatitude, setFocusLatitude] = useState(0);
   const navigation = useNavigation();
   const [makersTela, setMakersTela] = useState([]);
-  const [mapStyleTime, setMapStyleTime] = useState();
+  // const [mapStyleTime, setMapStyleTime] = useState();
 
   useEffect(() => {
     init();
-    let dataAtual = new Date();
-    let horas = dataAtual.getHours();
-    if (horas >= 19) {
-      setMapStyleTime(mapStyle);
-    }
   }, []);
 
   useEffect(() => {
@@ -132,7 +127,7 @@ export default function Home() {
           style={style.map}
           region={region}
           showsUserLocation={true}
-          customMapStyle={mapStyleTime}
+          // customMapStyle={mapStyleTime}
           loadingEnabled={true}
           onPress={e => locationEvent(e)}>
           {makersTela.map(p => {

@@ -20,13 +20,6 @@ export default function MyPlace() {
     setArrayExibir(appState.markers);
   }, []);
 
-  useEffect(() => {
-    setAppState({
-      ...appState,
-      markers: arrayExibir,
-    });
-  }, [arrayExibir]);
-
   function delet(key) {
     Alert.alert('Apagar Local', 'Deseja Apagar esse local?', [
       {
@@ -41,6 +34,10 @@ export default function MyPlace() {
             return p.key !== key;
           });
           setArrayExibir(arrayApagar);
+          setAppState({
+            ...appState,
+            markers: arrayApagar,
+          });
         },
       },
     ]);
@@ -63,6 +60,13 @@ export default function MyPlace() {
       key: key,
     };
     navigation.navigate('Registration', place);
+  }
+
+  function filtro(fil) {
+    const arrayFilter = appState.markers.filter(p => {
+      return p.corMarker === fil;
+    });
+    setArrayExibir(arrayFilter);
   }
 
   return (
@@ -88,13 +92,19 @@ export default function MyPlace() {
                 title={'Conhecido'}
                 color={'#B1F9AF'}
                 textColor={'#000'}
+                press={() => {
+                  filtro('#4DDEA1');
+                }}
               />
             </View>
             <View style={styles.vBtFilter}>
               <ButtonPerson
                 title={'A Conhecer'}
-                color={'#F8FAA1'}
+                color={'#4D98DE'}
                 textColor={'#000'}
+                press={() => {
+                  filtro('#4D98DE');
+                }}
               />
             </View>
             <View style={styles.vBtFilter}>
@@ -103,6 +113,9 @@ export default function MyPlace() {
                 color={'#F8B9B9'}
                 textColor={'#000'}
                 style={styles.vBtFilter}
+                press={() => {
+                  filtro('#DE4D4D');
+                }}
               />
             </View>
           </View>
