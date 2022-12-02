@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {Box, Text, Pressable, Image} from 'native-base';
 
 const props = {
   local: String,
@@ -19,37 +19,24 @@ export default function Card({
   eventEdit,
 }: props) {
   return (
-    <View style={{backgroundColor: cor}}>
-      <Text style={style.local}>{local}</Text>
-      <Text style={style.cidade}>{cidade}</Text>
-      <Text style={style.text}>{descricao}</Text>
-      <View style={style.vButtons}>
-        <View style={{flexDirection: 'row', marginEnd: 15}}>
-          <TouchableOpacity onPress={eventEdit}>
+    <Box backgroundColor={cor} rounded="lg" p="2">
+      <Text fontSize={25} bold>
+        {local}
+      </Text>
+      <Text fontSize={20} marginBottom={2}>
+        {cidade}
+      </Text>
+      <Text fontSize={17}>{descricao}</Text>
+      <Box alignItems={'flex-end'}>
+        <Box style={{flexDirection: 'row', marginEnd: 15}}>
+          <Pressable onPress={eventEdit}>
             <Image source={require('../../assets/edit.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={eventDelete}>
+          </Pressable>
+          <Pressable onPress={eventDelete}>
             <Image source={require('../../assets/lixeira.png')} />
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
+          </Pressable>
+        </Box>
+      </Box>
+    </Box>
   );
 }
-
-const style = StyleSheet.create({
-  local: {
-    fontSize: 25,
-    fontWeight: 'bold',
-  },
-  cidade: {
-    fontSize: 20,
-    marginBottom: 9,
-  },
-  text: {
-    fontSize: 20,
-  },
-  vButtons: {
-    alignItems: 'flex-end',
-  },
-});

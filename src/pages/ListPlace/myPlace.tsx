@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react';
-import {Text, View, StyleSheet, ScrollView, Alert} from 'react-native';
+import {StyleSheet, Alert} from 'react-native';
+import {Box, Text, ScrollView} from 'native-base';
 import * as Animatable from 'react-native-animatable';
 import ButtonPerson from '../../components/button/buttonPerson';
 import Card from '../../components/card/card';
@@ -70,24 +71,26 @@ export default function MyPlace() {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.containerLogo}>
+    <Box style={styles.container}>
+      <Box style={styles.containerLogo}>
         <Animatable.Image
           animation="flipInY"
           source={require('../../assets/logo.png')}
           style={{width: '40%'}}
           resizeMode="contain"
         />
-      </View>
+      </Box>
 
       <Animatable.View
         delay={600}
         animation="fadeInUp"
         style={styles.containerForm}>
-        <Text style={styles.title}>Meus Locais</Text>
+        <Text style={styles.title} alignSelf="center" bold>
+          Meus Locais
+        </Text>
         <ScrollView>
-          <View style={{flexDirection: 'row'}}>
-            <View style={styles.vBtFilter}>
+          <Box style={{flexDirection: 'row'}}>
+            <Box style={styles.vBtFilter}>
               <ButtonPerson
                 title={'Conhecido'}
                 color={'#B1F9AF'}
@@ -96,8 +99,8 @@ export default function MyPlace() {
                   filtro('#4DDEA1');
                 }}
               />
-            </View>
-            <View style={styles.vBtFilter}>
+            </Box>
+            <Box style={styles.vBtFilter}>
               <ButtonPerson
                 title={'A Conhecer'}
                 color={'#4D98DE'}
@@ -106,8 +109,8 @@ export default function MyPlace() {
                   filtro('#4D98DE');
                 }}
               />
-            </View>
-            <View style={styles.vBtFilter}>
+            </Box>
+            <Box style={styles.vBtFilter}>
               <ButtonPerson
                 title={'Evitar'}
                 color={'#F8B9B9'}
@@ -117,8 +120,8 @@ export default function MyPlace() {
                   filtro('#DE4D4D');
                 }}
               />
-            </View>
-          </View>
+            </Box>
+          </Box>
           {arrayExibir &&
             arrayExibir.map(o => (
               <SpaceCard key={o.key}>
@@ -134,7 +137,7 @@ export default function MyPlace() {
             ))}
         </ScrollView>
       </Animatable.View>
-    </View>
+    </Box>
   );
 }
 
@@ -159,10 +162,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
     marginTop: 15,
     marginBottom: 18,
-    alignSelf: 'center',
   },
   vSwitdual: {
     flexDirection: 'row',
