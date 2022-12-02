@@ -156,9 +156,14 @@ export default function Home() {
           <Image source={require('../../assets/gmappoint.png')} />
         </Pressable>
         <Pressable
-          style={style.vbtfootrigth}
+          style={style.vbtfootcenter}
           onPress={() => navigation.navigate('MyPlace')}>
           <Image source={require('../../assets/placephoto.png')} />
+        </Pressable>
+        <Pressable
+          style={style.vbtfootrigth}
+          onPress={() => navigation.navigate('MyPlace')}>
+          <Image source={require('../../assets/themes.png')} />
         </Pressable>
       </Box>
     </>
@@ -204,6 +209,12 @@ const style = StyleSheet.create({
     backgroundColor: '#5CBF78',
   },
   vbtfootrigth: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFD700',
+  },
+  vbtfootcenter: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
