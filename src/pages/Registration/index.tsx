@@ -253,7 +253,6 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
           <Box style={styles.vBTOne}>
             <ButtonPerson
               title={'Conheço'}
-              textColor={'#000'}
               color={conhecido === false ? '#F8F8FF' : '#4DDEA1'}
               press={() => setStatus('cc')}
             />
@@ -261,7 +260,6 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
           <Box style={styles.vBTOne}>
             <ButtonPerson
               title={'Quero Conheçer'}
-              textColor={'#000'}
               color={conhecer === false ? '#F8F8FF' : '#4D98DE'}
               press={() => setStatus('cr')}
             />
@@ -269,7 +267,6 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
           <Box style={styles.vBTOne}>
             <ButtonPerson
               title={'Evitar'}
-              textColor={'#000'}
               color={evitar === false ? '#F8F8FF' : '#DE4D4D'}
               press={() => setStatus('e')}
             />

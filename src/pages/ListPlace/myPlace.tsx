@@ -94,7 +94,6 @@ export default function MyPlace() {
               <ButtonPerson
                 title={'Conhecido'}
                 color={'#B1F9AF'}
-                textColor={'#000'}
                 press={() => {
                   filtro('#4DDEA1');
                 }}
@@ -104,7 +103,6 @@ export default function MyPlace() {
               <ButtonPerson
                 title={'A Conhecer'}
                 color={'#4D98DE'}
-                textColor={'#000'}
                 press={() => {
                   filtro('#4D98DE');
                 }}
@@ -114,7 +112,6 @@ export default function MyPlace() {
               <ButtonPerson
                 title={'Evitar'}
                 color={'#F8B9B9'}
-                textColor={'#000'}
                 style={styles.vBtFilter}
                 press={() => {
                   filtro('#DE4D4D');

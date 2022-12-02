@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Text, Pressable, Image} from 'native-base';
+import {Box, Text, Pressable, Image, useContrastText} from 'native-base';
 
 const props = {
   local: String,
@@ -18,8 +18,9 @@ export default function Card({
   eventDelete,
   eventEdit,
 }: props) {
+  const textColor = useContrastText(cor);
   return (
-    <Box backgroundColor={cor} rounded="lg" p="2">
+    <Box backgroundColor={cor} rounded="lg" p="2" _text={{color: textColor}}>
       <Text fontSize={25} bold>
         {local}
       </Text>

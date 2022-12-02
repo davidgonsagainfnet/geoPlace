@@ -1,16 +1,16 @@
 import React from 'react';
-import {Box, Text, Pressable} from 'native-base';
+import {Box, Text, Pressable, useContrastText} from 'native-base';
 
 const props = {
   title: String,
   color: String,
-  textColor: String,
   press: String,
 };
 
-export default function ButtonPerson({title, color, textColor, press}: props) {
+export default function ButtonPerson({title, color, press}: props) {
+  const textColor = useContrastText(color);
   return (
-    <Box>
+    <Box _text={{color: textColor}}>
       <Pressable
         style={{
           backgroundColor: color,
