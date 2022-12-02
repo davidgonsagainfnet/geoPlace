@@ -5,6 +5,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import Routes from './src/routes';
 import {AppContext, initialAppState} from './src/app/AppContext';
 import Loader from './src/components/loader/loader';
+import {NativeBaseProvider} from 'native-base';
 
 function delay(seconds: number) {
   return new Promise(resolve => {
@@ -33,11 +34,13 @@ export default function App() {
   }
 
   return (
-    <AppContext.Provider value={{appState, setAppState}}>
-      <NavigationContainer>
-        <StatusBar backgroundColor="#4D98DE" barStyle="light-content" />
-        <Routes />
-      </NavigationContainer>
-    </AppContext.Provider>
+    <NativeBaseProvider>
+      <AppContext.Provider value={{appState, setAppState}}>
+        <NavigationContainer>
+          <StatusBar backgroundColor="#4D98DE" barStyle="light-content" />
+          <Routes />
+        </NavigationContainer>
+      </AppContext.Provider>
+    </NativeBaseProvider>
   );
 }

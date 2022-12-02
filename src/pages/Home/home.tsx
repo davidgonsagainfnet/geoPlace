@@ -1,12 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  PermissionsAndroid,
-} from 'react-native';
+import {StyleSheet, PermissionsAndroid} from 'react-native';
+import {Image, Text, Box, Pressable} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import {AppContext} from '../../app/AppContext';
@@ -98,23 +92,27 @@ export default function Home() {
 
   return (
     <>
-      <View style={style.vtop}>
-        <View style={style.vimgtopgeral}>
-          <View style={style.vtopimginternoleft}>
-            <Text style={style.textTop}>GEO</Text>
-          </View>
-          <View style={style.vtopimginternocenter}>
+      <Box style={style.vtop}>
+        <Box style={style.vimgtopgeral}>
+          <Box style={style.vtopimginternoleft}>
+            <Text fontSize="50" bold color={'#fff'}>
+              GEO
+            </Text>
+          </Box>
+          <Box style={style.vtopimginternocenter}>
             <Image
               source={require('../../assets/pointTopoint.png')}
               style={style.imagetop}
             />
-          </View>
-          <View style={style.vtopimginternorigth}>
-            <Text style={style.textTop}>PLACE</Text>
-          </View>
-        </View>
-      </View>
-      <View style={style.vbody}>
+          </Box>
+          <Box style={style.vtopimginternorigth}>
+            <Text fontSize="50" bold color={'#fff'}>
+              PLACE
+            </Text>
+          </Box>
+        </Box>
+      </Box>
+      <Box style={style.vbody}>
         <MapView
           onMapReady={() => {
             PermissionsAndroid.request(
@@ -150,19 +148,19 @@ export default function Home() {
             );
           })}
         </MapView>
-      </View>
-      <View style={style.vfoot}>
-        <TouchableOpacity
+      </Box>
+      <Box style={style.vfoot}>
+        <Pressable
           style={style.vbtfootleft}
           onPress={() => navigation.navigate('Registration', {})}>
           <Image source={require('../../assets/gmappoint.png')} />
-        </TouchableOpacity>
-        <TouchableOpacity
+        </Pressable>
+        <Pressable
           style={style.vbtfootrigth}
           onPress={() => navigation.navigate('MyPlace')}>
           <Image source={require('../../assets/placephoto.png')} />
-        </TouchableOpacity>
-      </View>
+        </Pressable>
+      </Box>
     </>
   );
 }
@@ -198,11 +196,6 @@ const style = StyleSheet.create({
   vtopimginternorigth: {
     flex: 1,
     alignItems: 'center',
-  },
-  textTop: {
-    color: '#fff',
-    fontSize: 50,
-    fontWeight: 'bold',
   },
   vbtfootleft: {
     flex: 1,

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {Box, Text, Pressable} from 'native-base';
 
 const props = {
   title: String,
@@ -10,8 +10,8 @@ const props = {
 
 export default function ButtonPerson({title, color, textColor, press}: props) {
   return (
-    <View>
-      <TouchableOpacity
+    <Box>
+      <Pressable
         style={{
           backgroundColor: color,
           justifyContent: 'center',
@@ -21,10 +21,10 @@ export default function ButtonPerson({title, color, textColor, press}: props) {
           marginBottom: 5,
         }}
         onPress={press}>
-        <Text style={{color: textColor, fontSize: 20, fontWeight: 'bold'}}>
+        <Text color={textColor} fontSize="lg" bold>
           {title}
         </Text>
-      </TouchableOpacity>
-    </View>
+      </Pressable>
+    </Box>
   );
 }
