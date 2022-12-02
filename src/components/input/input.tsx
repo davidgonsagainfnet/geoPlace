@@ -1,28 +1,19 @@
 import React from 'react';
-import {View, Text, StyleSheet, TextInput} from 'react-native';
+import {Box, Text, Input} from 'native-base';
 
 export default function InputText(props) {
   return (
-    <View>
-      <Text style={styles.titleinput}>{props.title}</Text>
-      <TextInput
-        style={styles.input}
+    <Box>
+      <Text fontSize={20} marginTop={15} bold>
+        {props.title}
+      </Text>
+      <Input
+        variant="rounded"
+        size="xl"
         placeholder={props.placeholder}
         value={props.value}
         onChangeText={props.ChangeText}
       />
-    </View>
+    </Box>
   );
 }
-
-const styles = StyleSheet.create({
-  titleinput: {
-    fontSize: 20,
-    marginTop: 15,
-  },
-  input: {
-    borderBottomWidth: 1,
-    height: 40,
-    marginBottom: 12,
-  },
-});

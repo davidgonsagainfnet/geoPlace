@@ -1,13 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  StatusBar,
-  AppState,
-  Alert,
-} from 'react-native';
+import {StyleSheet, Alert} from 'react-native';
+import {Box, Text, ScrollView} from 'native-base';
 import * as Animatable from 'react-native-animatable';
 import InputText from '../../components/input/input';
 import ButtonPerson from '../../components/button/buttonPerson';
@@ -188,15 +181,15 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.containerLogo}>
+    <Box style={styles.container}>
+      <Box style={styles.containerLogo}>
         <Animatable.Image
           animation="flipInY"
           source={require('../../assets/logo.png')}
           style={{width: '40%'}}
           resizeMode="contain"
         />
-      </View>
+      </Box>
 
       <Animatable.View
         delay={600}
@@ -214,15 +207,15 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
             placeholder={'Informe a Latitude'}
             value={latitude}
           />
-          <View style={styles.vBuscaCep}>
-            <View style={styles.vViewCep}>
+          <Box style={styles.vBuscaCep}>
+            <Box style={styles.vViewCep}>
               <InputText
                 title={'Cep'}
                 placeholder={'Informe um cep'}
                 ChangeText={setFindCep}
               />
-            </View>
-            <View style={styles.vViewCep}>
+            </Box>
+            <Box style={styles.vViewCep}>
               <ButtonPerson
                 title={'Informar o cep'}
                 color={'#DBDE4D'}
@@ -230,8 +223,8 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
                   buscarCep();
                 }}
               />
-            </View>
-          </View>
+            </Box>
+          </Box>
           <InputText
             title={'Rua'}
             placeholder={'Informe a Rua'}
@@ -257,31 +250,31 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
             value={descricao}
             ChangeText={setDescricao}
           />
-          <View style={styles.vBTOne}>
+          <Box style={styles.vBTOne}>
             <ButtonPerson
               title={'Conheço'}
               textColor={'#000'}
               color={conhecido === false ? '#F8F8FF' : '#4DDEA1'}
               press={() => setStatus('cc')}
             />
-          </View>
-          <View style={styles.vBTOne}>
+          </Box>
+          <Box style={styles.vBTOne}>
             <ButtonPerson
               title={'Quero Conheçer'}
               textColor={'#000'}
               color={conhecer === false ? '#F8F8FF' : '#4D98DE'}
               press={() => setStatus('cr')}
             />
-          </View>
-          <View style={styles.vBTOne}>
+          </Box>
+          <Box style={styles.vBTOne}>
             <ButtonPerson
               title={'Evitar'}
               textColor={'#000'}
               color={evitar === false ? '#F8F8FF' : '#DE4D4D'}
               press={() => setStatus('e')}
             />
-          </View>
-          <View style={styles.vButtons}>
+          </Box>
+          <Box style={styles.vButtons}>
             <ButtonPerson
               title={editar ? 'Editar Local' : 'Salvar Local'}
               color={'#4D98DE'}
@@ -293,10 +286,10 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
                 }
               }}
             />
-          </View>
+          </Box>
         </ScrollView>
       </Animatable.View>
-    </View>
+    </Box>
   );
 }
 
