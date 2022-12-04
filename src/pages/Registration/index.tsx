@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react';
 import {StyleSheet, Alert} from 'react-native';
-import {Box, Text, ScrollView} from 'native-base';
+import {Box, Text, ScrollView, useContrastText} from 'native-base';
 import * as Animatable from 'react-native-animatable';
 import InputText from '../../components/input/input';
 import ButtonPerson from '../../components/button/buttonPerson';
@@ -28,6 +28,11 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
   const [editKey, setEditKey] = useState(0);
   const navigation = useNavigation();
   const [findCep, setFindCep] = useState('');
+  const [colorThemeCard, setColorThemeCard] = useState<String>('');
+
+  const colorTheme = appState.isDarkTheme === true ? '#000' : '#fff';
+
+  const contrastTheme = useContrastText(colorTheme);
 
   function setStatus(status) {
     setConhecer(false);
@@ -163,6 +168,7 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
       setEditar(true);
       setEditKey(route.params.key);
     }
+    setColorThemeCard(colorTheme);
   }, []);
 
   async function buscarCep() {
@@ -194,18 +200,29 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
       <Animatable.View
         delay={600}
         animation="fadeInUp"
-        style={styles.containerForm}>
-        <Text style={styles.title}>Cadastro de Local</Text>
+        style={{
+          flex: 3,
+          backgroundColor: colorThemeCard,
+          borderTopLeftRadius: 25,
+          borderTopRightRadius: 25,
+          paddingStart: '5%',
+          paddingEnd: '5%',
+        }}>
+        <Text style={styles.title} color={contrastTheme}>
+          Cadastro de Local
+        </Text>
         <ScrollView>
           <InputText
             title={'Longitude'}
             placeholder={'Informe a Longitude'}
             value={longtitude}
+            colortext={contrastTheme}
           />
           <InputText
             title={'Latitude'}
             placeholder={'Informe a Latitude'}
             value={latitude}
+            colortext={contrastTheme}
           />
           <Box style={styles.vBuscaCep}>
             <Box style={styles.vViewCep}>
@@ -213,6 +230,7 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
                 title={'Cep'}
                 placeholder={'Informe um cep'}
                 ChangeText={setFindCep}
+                colortext={contrastTheme}
               />
             </Box>
             <Box style={styles.vViewCep}>
@@ -230,18 +248,21 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
             placeholder={'Informe a Rua'}
             value={rua}
             ChangeText={setRua}
+            colortext={contrastTheme}
           />
           <InputText
             title={'Cidade'}
             placeholder={'Informe a Cidade'}
             value={cidade}
             ChangeText={setCidade}
+            colortext={contrastTheme}
           />
           <InputText
             title={'Estado'}
             placeholder={'Informe a Estado'}
             value={estado}
             ChangeText={setEstado}
+            colortext={contrastTheme}
           />
 
           <TextArea
@@ -249,6 +270,7 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
             placeholder={''}
             value={descricao}
             ChangeText={setDescricao}
+            colortext={contrastTheme}
           />
           <Box style={styles.vBTOne}>
             <ButtonPerson
@@ -300,14 +322,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#4D98DE',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  containerForm: {
-    flex: 3,
-    backgroundColor: '#FFF',
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    paddingStart: '5%',
-    paddingEnd: '5%',
   },
   title: {
     fontSize: 20,

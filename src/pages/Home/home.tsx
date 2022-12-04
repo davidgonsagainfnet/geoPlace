@@ -5,7 +5,8 @@ import {useNavigation} from '@react-navigation/native';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import {AppContext} from '../../app/AppContext';
 import Geolocation from 'react-native-geolocation-service';
-//import mapStyle from '../../mapStyle.json';
+import mapStyleLigth from '../../mapStyleLight.json';
+import mapStyleDark from '../../mapStyleDark.json';
 
 export default function Home() {
   const {appState, setAppState} = useContext(AppContext);
@@ -13,10 +14,13 @@ export default function Home() {
   const [focusLatitude, setFocusLatitude] = useState(0);
   const navigation = useNavigation();
   const [makersTela, setMakersTela] = useState([]);
-  // const [mapStyleTime, setMapStyleTime] = useState();
+  const [mapStyleTime, setMapStyleTime] = useState();
 
   useEffect(() => {
     init();
+    setMapStyleTime(
+      appState.isDarkTheme === true ? mapStyleDark : mapStyleLigth,
+    );
   }, []);
 
   useEffect(() => {
@@ -90,6 +94,16 @@ export default function Home() {
     navigation.navigate('Registration', place);
   }
 
+  function trocarThema() {
+    setAppState({
+      ...appState,
+      isDarkTheme: !appState.isDarkTheme,
+    });
+    setMapStyleTime(
+      appState.isDarkTheme !== true ? mapStyleDark : mapStyleLigth,
+    );
+  }
+
   return (
     <>
       <Box style={style.vtop}>
@@ -125,7 +139,7 @@ export default function Home() {
           style={style.map}
           region={region}
           showsUserLocation={true}
-          // customMapStyle={mapStyleTime}
+          customMapStyle={mapStyleTime}
           loadingEnabled={true}
           onPress={e => locationEvent(e)}>
           {makersTela.map(p => {
@@ -160,9 +174,7 @@ export default function Home() {
           onPress={() => navigation.navigate('MyPlace')}>
           <Image source={require('../../assets/placephoto.png')} />
         </Pressable>
-        <Pressable
-          style={style.vbtfootrigth}
-          onPress={() => navigation.navigate('MyPlace')}>
+        <Pressable style={style.vbtfootrigth} onPress={() => trocarThema()}>
           <Image source={require('../../assets/themes.png')} />
         </Pressable>
       </Box>

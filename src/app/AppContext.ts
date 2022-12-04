@@ -1,6 +1,7 @@
 import {createContext} from 'react';
 
 export type AppState = {
+  isDarkTheme: Boolean;
   isLoading: Boolean;
   coordsFocus: {
     latitude: number;
@@ -10,6 +11,7 @@ export type AppState = {
 };
 
 export const initialAppState: AppState = {
+  isDarkTheme: false,
   isLoading: true,
   coordsFocus: {
     latitude: 0,

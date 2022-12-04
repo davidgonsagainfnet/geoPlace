@@ -6,6 +6,7 @@ const props = {
   placeholder: String,
   ChangeText: String,
   value: String,
+  colortext: String,
 };
 
 export default function TextArea({
@@ -13,10 +14,11 @@ export default function TextArea({
   placeholder,
   ChangeText,
   value,
+  colortext,
 }: props) {
   return (
     <Box>
-      <Text marginTop={15} fontSize={'xl'} bold>
+      <Text marginTop={15} fontSize={'xl'} color={colortext} bold>
         {title}
       </Text>
       <Input
@@ -29,6 +31,7 @@ export default function TextArea({
         numberOfLines={4}
         onChangeText={ChangeText}
         value={value}
+        style={{color: colortext}}
       />
     </Box>
   );

@@ -1,7 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {StatusBar} from 'react-native';
+import {StatusBar, Appearance} from 'react-native';
 
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from '@react-navigation/native';
 import Routes from './src/routes';
 import {AppContext, initialAppState} from './src/app/AppContext';
 import Loader from './src/components/loader/loader';
@@ -25,7 +29,12 @@ export default function App() {
 
   useEffect(() => {
     init().then(isSuccess => {
-      isSuccess === true && setAppState({...appState, isLoading: false});
+      isSuccess === true &&
+        setAppState({
+          ...appState,
+          isLoading: false,
+          isDarkTheme: Appearance.getColorScheme() === 'dark',
+        });
     });
   }, []);
 
@@ -36,7 +45,7 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <AppContext.Provider value={{appState, setAppState}}>
-        <NavigationContainer>
+        <NavigationContainer theme={DarkTheme}>
           <StatusBar backgroundColor="#4D98DE" barStyle="light-content" />
           <Routes />
         </NavigationContainer>

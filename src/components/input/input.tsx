@@ -4,7 +4,7 @@ import {Box, Text, Input} from 'native-base';
 export default function InputText(props) {
   return (
     <Box>
-      <Text fontSize={20} marginTop={15} bold>
+      <Text fontSize={20} marginTop={15} color={props.colortext} bold>
         {props.title}
       </Text>
       <Input
@@ -13,6 +13,7 @@ export default function InputText(props) {
         placeholder={props.placeholder}
         value={props.value}
         onChangeText={props.ChangeText}
+        style={{color: props.colortext}}
       />
     </Box>
   );

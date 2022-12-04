@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react';
 import {StyleSheet, Alert} from 'react-native';
-import {Box, Text, ScrollView} from 'native-base';
+import {Box, Text, ScrollView, useContrastText} from 'native-base';
 import * as Animatable from 'react-native-animatable';
 import ButtonPerson from '../../components/button/buttonPerson';
 import Card from '../../components/card/card';
@@ -11,14 +11,19 @@ import {useNavigation} from '@react-navigation/native';
 export default function MyPlace() {
   const {appState, setAppState} = useContext(AppContext);
   const [arrayExibir, setArrayExibir] = useState<Array<any>>([]);
+  const [colorThemeCard, setColorThemeCard] = useState<String>('');
   const navigation = useNavigation();
 
   const SpaceCard = styled.View`
     margin: 10px;
   `;
+  const colorTheme = appState.isDarkTheme === true ? '#000' : '#fff';
+
+  const contrastTheme = useContrastText(colorTheme);
 
   useEffect(() => {
     setArrayExibir(appState.markers);
+    setColorThemeCard(colorTheme);
   }, []);
 
   function delet(key) {
@@ -84,8 +89,19 @@ export default function MyPlace() {
       <Animatable.View
         delay={600}
         animation="fadeInUp"
-        style={styles.containerForm}>
-        <Text style={styles.title} alignSelf="center" bold>
+        style={{
+          backgroundColor: colorThemeCard,
+          flex: 3,
+          borderTopLeftRadius: 25,
+          borderTopRightRadius: 25,
+          paddingStart: '5%',
+          paddingEnd: '5%',
+        }}>
+        <Text
+          style={styles.title}
+          color={contrastTheme}
+          alignSelf="center"
+          bold>
           Meus Locais
         </Text>
         <ScrollView>
@@ -148,14 +164,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#4D98DE',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  containerForm: {
-    flex: 3,
-    backgroundColor: '#FFF',
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    paddingStart: '5%',
-    paddingEnd: '5%',
   },
   title: {
     fontSize: 20,
