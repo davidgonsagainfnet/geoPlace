@@ -53,7 +53,6 @@ export default function MyPlace() {
     const arrayFilter = arrayExibir.filter(p => {
       return p.key === key;
     });
-    console.log(arrayFilter);
     let place = {
       latitude: parseFloat(arrayFilter[0].latitude),
       longitude: parseFloat(arrayFilter[0].longtitude),

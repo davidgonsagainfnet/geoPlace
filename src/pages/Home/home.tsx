@@ -47,7 +47,6 @@ export default function Home() {
       });
     }
     setMakersTela([...appState.markers]);
-    console.log('chamou');
   }
 
   function positionDevice() {
@@ -79,7 +78,6 @@ export default function Home() {
     const arrayFilter = makersTela.filter(p => {
       return p.key === key;
     });
-    console.log(arrayFilter);
     let place = {
       latitude: parseFloat(arrayFilter[0].latitude),
       longitude: parseFloat(arrayFilter[0].longtitude),
@@ -131,9 +129,7 @@ export default function Home() {
           onMapReady={() => {
             PermissionsAndroid.request(
               PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            ).then(() => {
-              console.log('USUARIO ACESSOU');
-            });
+            ).then(() => {});
           }}
           provider={PROVIDER_GOOGLE}
           style={style.map}
@@ -143,8 +139,6 @@ export default function Home() {
           loadingEnabled={true}
           onPress={e => locationEvent(e)}>
           {makersTela.map(p => {
-            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-            console.log(p.key);
             let point = {
               latitude: Number(p.latitude),
               longitude: Number(p.longtitude),
@@ -173,6 +167,11 @@ export default function Home() {
           style={style.vbtfootcenter}
           onPress={() => navigation.navigate('MyPlace')}>
           <Image source={require('../../assets/placephoto.png')} />
+        </Pressable>
+        <Pressable
+          style={style.vbtfootcenterleft}
+          onPress={() => navigation.navigate('Feeds')}>
+          <Image source={require('../../assets/mundo.png')} />
         </Pressable>
         <Pressable style={style.vbtfootrigth} onPress={() => trocarThema()}>
           <Image source={require('../../assets/themes.png')} />
@@ -231,6 +230,12 @@ const style = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#4D98DE',
+  },
+  vbtfootcenterleft: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#66CDAA',
   },
   map: {
     ...StyleSheet.absoluteFillObject,

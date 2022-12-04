@@ -29,10 +29,11 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
   const navigation = useNavigation();
   const [findCep, setFindCep] = useState('');
   const [colorThemeCard, setColorThemeCard] = useState<String>('');
+  const [contrastTheme, setContrastTheme] = useState<String>('');
 
   const colorTheme = appState.isDarkTheme === true ? '#000' : '#fff';
 
-  const contrastTheme = useContrastText(colorTheme);
+  const contrastThemeLoad = useContrastText(colorTheme);
 
   function setStatus(status) {
     setConhecer(false);
@@ -118,7 +119,6 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
       ...appState,
       markers: arrayTemp,
     });
-    console.log(arrayTemp);
     navigation.navigate('Home');
   }
 
@@ -146,7 +146,6 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
       ...appState,
       markers: arrayEdit,
     });
-    console.log(arrayEdit);
     navigation.navigate('Home');
   }
 
@@ -169,12 +168,12 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
       setEditKey(route.params.key);
     }
     setColorThemeCard(colorTheme);
+    setContrastTheme(contrastThemeLoad);
   }, []);
 
   async function buscarCep() {
     if (findCep !== '') {
       await cep.get('/' + findCep + '/json/').then(response => {
-        console.log(response.data);
         setRua(response.data.logradouro);
         setCidade(response.data.localidade);
         setEstado(response.data.uf);
