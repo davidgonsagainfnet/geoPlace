@@ -7,8 +7,11 @@ import {AppContext} from '../../app/AppContext';
 import Geolocation from 'react-native-geolocation-service';
 import mapStyleLigth from '../../mapStyleLight.json';
 import mapStyleDark from '../../mapStyleDark.json';
+import {appActions, useAppDispatch, useAppSelector} from '../../app/appStore';
 
 export default function Home() {
+  const dispatch = useAppDispatch();
+  const isDarkTheme = useAppSelector(state => state.app.isDarkTheme);
   const {appState, setAppState} = useContext(AppContext);
   const [region, setRegion] = useState(undefined);
   const [focusLatitude, setFocusLatitude] = useState(0);
@@ -18,9 +21,8 @@ export default function Home() {
 
   useEffect(() => {
     init();
-    setMapStyleTime(
-      appState.isDarkTheme === true ? mapStyleDark : mapStyleLigth,
-    );
+    setMapStyleTime(isDarkTheme === true ? mapStyleDark : mapStyleLigth);
+    console.log(isDarkTheme);
   }, []);
 
   useEffect(() => {
@@ -93,13 +95,16 @@ export default function Home() {
   }
 
   function trocarThema() {
-    setAppState({
-      ...appState,
-      isDarkTheme: !appState.isDarkTheme,
-    });
-    setMapStyleTime(
-      appState.isDarkTheme !== true ? mapStyleDark : mapStyleLigth,
+    // setAppState({
+    //   ...appState,
+    //   isDarkTheme: !appState.isDarkTheme,
+    // });
+    dispatch(
+      appActions.setDarkTheme({
+        isDarkTheme: !isDarkTheme,
+      }),
     );
+    setMapStyleTime(isDarkTheme !== true ? mapStyleDark : mapStyleLigth);
   }
 
   return (
@@ -115,6 +120,7 @@ export default function Home() {
             <Image
               source={require('../../assets/pointTopoint.png')}
               style={style.imagetop}
+              alt=""
             />
           </Box>
           <Box style={style.vtopimginternorigth}>
@@ -161,20 +167,20 @@ export default function Home() {
         <Pressable
           style={style.vbtfootleft}
           onPress={() => navigation.navigate('Registration', {})}>
-          <Image source={require('../../assets/gmappoint.png')} />
+          <Image source={require('../../assets/gmappoint.png')} alt="" />
         </Pressable>
         <Pressable
           style={style.vbtfootcenter}
           onPress={() => navigation.navigate('MyPlace')}>
-          <Image source={require('../../assets/placephoto.png')} />
+          <Image source={require('../../assets/placephoto.png')} alt="" />
         </Pressable>
         <Pressable
           style={style.vbtfootcenterleft}
           onPress={() => navigation.navigate('Feeds')}>
-          <Image source={require('../../assets/mundo.png')} />
+          <Image source={require('../../assets/mundo.png')} alt="" />
         </Pressable>
         <Pressable style={style.vbtfootrigth} onPress={() => trocarThema()}>
-          <Image source={require('../../assets/themes.png')} />
+          <Image source={require('../../assets/themes.png')} alt="" />
         </Pressable>
       </Box>
     </>

@@ -10,6 +10,7 @@ import type {ParamListBase} from '@react-navigation/native';
 import {AppContext} from '../../app/AppContext';
 import {useNavigation} from '@react-navigation/native';
 import cep from '../../api/cep';
+import {useAppSelector} from '../../app/appStore';
 
 export default function Registration({route}: ScreenStackProps<ParamListBase>) {
   const {appState, setAppState} = useContext(AppContext);
@@ -30,8 +31,9 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
   const [findCep, setFindCep] = useState('');
   const [colorThemeCard, setColorThemeCard] = useState<String>('');
   const [contrastTheme, setContrastTheme] = useState<String>('');
+  const isDarkTheme = useAppSelector(state => state.app.isDarkTheme);
 
-  const colorTheme = appState.isDarkTheme === true ? '#000' : '#fff';
+  const colorTheme = isDarkTheme === true ? '#000' : '#fff';
 
   const contrastThemeLoad = useContrastText(colorTheme);
 

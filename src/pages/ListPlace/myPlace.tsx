@@ -7,8 +7,10 @@ import Card from '../../components/card/card';
 import {AppContext} from '../../app/AppContext';
 import styled from 'styled-components/native';
 import {useNavigation} from '@react-navigation/native';
+import {useAppSelector} from '../../app/appStore';
 
 export default function MyPlace() {
+  const isDarkTheme = useAppSelector(state => state.app.isDarkTheme);
   const {appState, setAppState} = useContext(AppContext);
   const [arrayExibir, setArrayExibir] = useState<Array<any>>([]);
   const [colorThemeCard, setColorThemeCard] = useState<String>('');
@@ -17,7 +19,7 @@ export default function MyPlace() {
   const SpaceCard = styled.View`
     margin: 10px;
   `;
-  const colorTheme = appState.isDarkTheme === true ? '#000' : '#fff';
+  const colorTheme = isDarkTheme === true ? '#000' : '#fff';
 
   const contrastTheme = useContrastText(colorTheme);
 

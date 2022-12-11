@@ -1,10 +1,10 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {Box, Text, Input} from 'native-base';
-import {AppContext} from '../../app/AppContext';
+import {useAppSelector} from '../../app/appStore';
 
 export default function InputText(props) {
-  const {appState, setAppState} = useContext(AppContext);
-  const colorTheme = appState.isDarkTheme !== true ? '#000' : '#fff';
+  const isDarkTheme = useAppSelector(state => state.app.isDarkTheme);
+  const colorTheme = isDarkTheme !== true ? '#000' : '#fff';
   return (
     <Box>
       <Text fontSize={20} marginTop={15} color={props.colortext} bold>

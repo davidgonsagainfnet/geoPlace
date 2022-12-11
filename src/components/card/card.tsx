@@ -31,10 +31,10 @@ export default function Card({
       <Box alignItems={'flex-end'}>
         <Box style={{flexDirection: 'row', marginEnd: 15}}>
           <Pressable onPress={eventEdit}>
-            <Image source={require('../../assets/edit.png')} />
+            <Image source={require('../../assets/edit.png')} alt="" />
           </Pressable>
           <Pressable onPress={eventDelete}>
-            <Image source={require('../../assets/lixeira.png')} />
+            <Image source={require('../../assets/lixeira.png')} alt="" />
           </Pressable>
         </Box>
       </Box>
