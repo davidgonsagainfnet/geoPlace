@@ -7,11 +7,17 @@ import {AppContext} from '../../app/AppContext';
 import Geolocation from 'react-native-geolocation-service';
 import mapStyleLigth from '../../mapStyleLight.json';
 import mapStyleDark from '../../mapStyleDark.json';
-import {appActions, useAppDispatch, useAppSelector} from '../../app/appStore';
+import {
+  appActions,
+  useAppDispatch,
+  useAppSelector,
+  coordActions,
+} from '../../app/appStore';
 
 export default function Home() {
   const dispatch = useAppDispatch();
   const isDarkTheme = useAppSelector(state => state.app.isDarkTheme);
+  const markers = useAppSelector(state => state.coord.markers);
   const {appState, setAppState} = useContext(AppContext);
   const [region, setRegion] = useState(undefined);
   const [focusLatitude, setFocusLatitude] = useState(0);
@@ -22,7 +28,6 @@ export default function Home() {
   useEffect(() => {
     init();
     setMapStyleTime(isDarkTheme === true ? mapStyleDark : mapStyleLigth);
-    console.log(isDarkTheme);
   }, []);
 
   useEffect(() => {
@@ -30,25 +35,25 @@ export default function Home() {
   }, [focusLatitude]);
 
   useEffect(() => {
-    setMakersTela([...appState.markers]);
-  }, [appState.markers]);
+    setMakersTela([markers]);
+  }, [markers]);
 
   useEffect(() => {
     positionDevice();
   }, [makersTela]);
 
   function init() {
-    if (appState.coordsFocus.latitude === 0) {
+    if (markers.latitude === 0) {
       positionDevice();
     } else {
       setRegion({
-        latitude: appState.coordsFocus.latitude,
-        longitude: appState.coordsFocus.longitude,
+        latitude: markers.latitude,
+        longitude: markers.longitude,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       });
     }
-    setMakersTela([...appState.markers]);
+    setMakersTela([markers]);
   }
 
   function positionDevice() {
@@ -95,10 +100,6 @@ export default function Home() {
   }
 
   function trocarThema() {
-    // setAppState({
-    //   ...appState,
-    //   isDarkTheme: !appState.isDarkTheme,
-    // });
     dispatch(
       appActions.setDarkTheme({
         isDarkTheme: !isDarkTheme,
