@@ -46,6 +46,7 @@ export default function Home() {
     if (markers.latitude === 0) {
       positionDevice();
     } else {
+      console.log(markers);
       setRegion({
         latitude: markers.latitude,
         longitude: markers.longitude,
@@ -69,10 +70,19 @@ export default function Home() {
 
   function locationEvent(p) {
     setFocusLatitude(p.nativeEvent.coordinate.latitude);
-    setAppState({
-      ...appState,
-      coordsFocus: p.nativeEvent.coordinate,
-    });
+    // setAppState({
+    //   ...appState,
+    //   coordsFocus: p.nativeEvent.coordinate,
+    // });
+    dispatch(
+      coordActions.setCoords({
+        coords: p.nativeEvent.coordinate,
+      }),
+    );
+    // dispatch(
+    //   appActions.setDarkTheme({
+    //     isDarkTheme: !isDarkTheme,
+    //   })
     let place = {
       latitude: p.nativeEvent.coordinate.latitude,
       longitude: p.nativeEvent.coordinate.longitude,
@@ -148,7 +158,7 @@ export default function Home() {
           {makersTela.map(p => {
             let point = {
               latitude: Number(p.latitude),
-              longitude: Number(p.longtitude),
+              longitude: Number(p.longitude),
             };
             return (
               <Marker

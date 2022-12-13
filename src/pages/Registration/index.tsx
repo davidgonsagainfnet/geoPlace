@@ -3,6 +3,7 @@ import {StyleSheet, Alert} from 'react-native';
 import {Box, Text, ScrollView, useContrastText} from 'native-base';
 import * as Animatable from 'react-native-animatable';
 import InputText from '../../components/input/input';
+import InputNumber from '../../components/input/inputnumber';
 import ButtonPerson from '../../components/button/buttonPerson';
 import TextArea from '../../components/input/textArea';
 import type {ScreenStackProps} from 'react-native-screens';
@@ -10,12 +11,17 @@ import type {ParamListBase} from '@react-navigation/native';
 import {AppContext} from '../../app/AppContext';
 import {useNavigation} from '@react-navigation/native';
 import cep from '../../api/cep';
-import {useAppSelector} from '../../app/appStore';
+import {
+  appActions,
+  useAppDispatch,
+  useAppSelector,
+  coordActions,
+} from '../../app/appStore';
 
 export default function Registration({route}: ScreenStackProps<ParamListBase>) {
   const {appState, setAppState} = useContext(AppContext);
-  const [latitude, setLatitude] = useState('');
-  const [longtitude, setLongtitude] = useState('');
+  const [latitude, setLatitude] = useState(0.0);
+  const [longtitude, setLongtitude] = useState(0.0);
   const [conhecer, setConhecer] = useState(false);
   const [evitar, setEvitar] = useState(false);
   const [conhecido, setConhecido] = useState(false);
@@ -32,6 +38,9 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
   const [colorThemeCard, setColorThemeCard] = useState<String>('');
   const [contrastTheme, setContrastTheme] = useState<String>('');
   const isDarkTheme = useAppSelector(state => state.app.isDarkTheme);
+  const coordsFocus = useAppSelector(state => state.coord.coordsFocus);
+  const markers = useAppSelector(state => state.coord.markers);
+  const dispatch = useAppDispatch();
 
   const colorTheme = isDarkTheme === true ? '#000' : '#fff';
 
@@ -88,39 +97,46 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
       return;
     }
 
-    if (latitude === '') {
+    if (latitude === 0) {
       Alert.alert('Error', 'Informe a Latitude', [
         {text: 'OK', onPress: () => console.log('OK Pressed')},
       ]);
       return;
     }
 
-    if (longtitude === '') {
+    if (longtitude === 0) {
       Alert.alert('Error', 'Informe a Longitude', [
         {text: 'OK', onPress: () => console.log('OK Pressed')},
       ]);
       return;
     }
 
-    const arrayOriginal = appState.markers;
-    let arrayTemp = [
-      ...arrayOriginal,
-      {
-        key: arrayOriginal.length + 1,
-        latitude: latitude,
-        longtitude: longtitude,
-        rua: rua,
-        cidade: cidade,
-        descricao: descricao,
-        estado: estado,
-        corMarker: corMarker,
-      },
-    ];
+    let arrayOriginal = [markers]; //appState.markers;
+    let arrayTemp = {
+      key: arrayOriginal.length + 1,
+      latitude: Number(latitude),
+      longitude: Number(longtitude),
+      rua: rua,
+      cidade: cidade,
+      descricao: descricao,
+      estado: estado,
+      corMarker: corMarker,
+    };
 
-    setAppState({
-      ...appState,
-      markers: arrayTemp,
-    });
+    console.log('@@@@@@@@@@');
+    console.log(arrayTemp);
+
+    dispatch(
+      coordActions.setMarkers({
+        ...arrayOriginal,
+        markers: arrayTemp,
+      }),
+    );
+
+    // setAppState({
+    //   ...appState,
+    //   markers: arrayTemp,
+    // });
     navigation.navigate('Home');
   }
 
@@ -152,8 +168,11 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
   }
 
   useEffect(() => {
-    setLatitude(JSON.stringify(route.params.latitude, undefined, 2));
-    setLongtitude(JSON.stringify(route.params.longitude, undefined, 2));
+    // setLatitude(JSON.stringify(route.params.latitude, undefined, 2));
+    // setLongtitude(JSON.stringify(route.params.longitude, undefined, 2));
+    setLatitude(JSON.stringify(coordsFocus.latitude, undefined, 2));
+    setLongtitude(JSON.stringify(coordsFocus.longitude, undefined, 2));
+
     if (typeof route.params.rua !== 'undefined') {
       setRua(route.params.rua);
       setCidade(route.params.cidade);
@@ -213,13 +232,13 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
           Cadastro de Local
         </Text>
         <ScrollView>
-          <InputText
+          <InputNumber
             title={'Longitude'}
             placeholder={'Informe a Longitude'}
             value={longtitude}
             colortext={contrastTheme}
           />
-          <InputText
+          <InputNumber
             title={'Latitude'}
             placeholder={'Informe a Latitude'}
             value={latitude}
@@ -227,7 +246,7 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
           />
           <Box style={styles.vBuscaCep}>
             <Box style={styles.vViewCep}>
-              <InputText
+              <InputNumber
                 title={'Cep'}
                 placeholder={'Informe um cep'}
                 ChangeText={setFindCep}
