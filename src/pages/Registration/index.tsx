@@ -111,8 +111,8 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
       return;
     }
 
-    let arrayOriginal = [markers]; //appState.markers;
-    let arrayTemp = {
+    const arrayOriginal = [markers]; //appState.markers;
+    const arrayTemp = {
       key: arrayOriginal.length + 1,
       latitude: Number(latitude),
       longitude: Number(longtitude),
