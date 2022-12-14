@@ -123,12 +123,8 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
       corMarker: corMarker,
     };
 
-    console.log('@@@@@@@@@@');
-    console.log(arrayTemp);
-
     dispatch(
       coordActions.setMarkers({
-        ...arrayOriginal,
         markers: arrayTemp,
       }),
     );

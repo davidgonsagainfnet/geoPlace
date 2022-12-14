@@ -42,8 +42,8 @@ export const coordSlice = createSlice({
     setCoords(state, action: PayloadAction<{coords: coordsFocusType}>) {
       state.coordsFocus = action.payload.coords;
     },
-    setMarkers(state, action: PayloadAction<{markers: markersFocusType}[]>) {
-      state.markers = action.payload.markers;
+    setMarkers(state, action: PayloadAction<{markers: markersFocusType[]}>) {
+      state.markers = [state.markers, action.payload.markers];
     },
   },
 });

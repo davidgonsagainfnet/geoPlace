@@ -35,7 +35,7 @@ export default function Home() {
   }, [focusLatitude]);
 
   useEffect(() => {
-    setMakersTela([markers]);
+    setMakersTela(Object.values(markers));
   }, [markers]);
 
   useEffect(() => {
@@ -46,7 +46,6 @@ export default function Home() {
     if (markers.latitude === 0) {
       positionDevice();
     } else {
-      console.log(markers);
       setRegion({
         latitude: markers.latitude,
         longitude: markers.longitude,
@@ -54,7 +53,7 @@ export default function Home() {
         longitudeDelta: 0.0421,
       });
     }
-    setMakersTela([markers]);
+    setMakersTela(Object.values(markers));
   }
 
   function positionDevice() {
@@ -92,6 +91,10 @@ export default function Home() {
   }
 
   function edit(key) {
+    console.log(
+      'haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+    );
+    console.log(key);
     const arrayFilter = makersTela.filter(p => {
       return p.key === key;
     });
