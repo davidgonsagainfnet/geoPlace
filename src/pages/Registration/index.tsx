@@ -11,6 +11,7 @@ import {AppContext} from '../../app/AppContext';
 import {useNavigation} from '@react-navigation/native';
 import cep from '../../api/cep';
 import {useAppSelector} from '../../app/appStore';
+import InputNumber from '../../components/input/inputNumber';
 
 export default function Registration({route}: ScreenStackProps<ParamListBase>) {
   const {appState, setAppState} = useContext(AppContext);
@@ -213,13 +214,13 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
           Cadastro de Local
         </Text>
         <ScrollView>
-          <InputText
+          <InputNumber
             title={'Longitude'}
             placeholder={'Informe a Longitude'}
             value={longtitude}
             colortext={contrastTheme}
           />
-          <InputText
+          <InputNumber
             title={'Latitude'}
             placeholder={'Informe a Latitude'}
             value={latitude}
@@ -227,7 +228,7 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
           />
           <Box style={styles.vBuscaCep}>
             <Box style={styles.vViewCep}>
-              <InputText
+              <InputNumber
                 title={'Cep'}
                 placeholder={'Informe um cep'}
                 ChangeText={setFindCep}
