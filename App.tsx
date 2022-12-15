@@ -7,11 +7,17 @@ import {
   useAppDispatch,
   useAppSelector,
 } from './src/app/appStore';
+import {
+  apolloClient,
+  ApolloProvider,
+} from './src/components/apollo/apolloClient';
 
 export default function App() {
   return (
     <AppStoreProvider store={appStore}>
-      <AppContainner />
+      <ApolloProvider client={apolloClient}>
+        <AppContainner />
+      </ApolloProvider>
     </AppStoreProvider>
   );
 }
