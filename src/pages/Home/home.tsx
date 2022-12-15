@@ -7,7 +7,12 @@ import {AppContext} from '../../app/AppContext';
 import Geolocation from 'react-native-geolocation-service';
 import mapStyleLigth from '../../mapStyleLight.json';
 import mapStyleDark from '../../mapStyleDark.json';
-import {appActions, useAppDispatch, useAppSelector} from '../../app/appStore';
+import {
+  appActions,
+  placeActions,
+  useAppDispatch,
+  useAppSelector,
+} from '../../app/appStore';
 
 export default function Home() {
   const dispatch = useAppDispatch();
@@ -68,37 +73,47 @@ export default function Home() {
       ...appState,
       coordsFocus: p.nativeEvent.coordinate,
     });
-    let place = {
+    const placeFocus = {
+      key: 0,
       latitude: p.nativeEvent.coordinate.latitude,
-      longitude: p.nativeEvent.coordinate.longitude,
-      edit: false,
+      longtitude: p.nativeEvent.coordinate.longitude,
+      rua: '',
+      cidade: '',
+      descricao: '',
+      estado: '',
+      corMarker: '',
     };
-    navigation.navigate('Registration', place);
+    dispatch(
+      placeActions.setPlace({
+        place: placeFocus,
+      }),
+    );
+    navigation.navigate('Registration');
   }
 
   function edit(key) {
     const arrayFilter = makersTela.filter(p => {
       return p.key === key;
     });
-    let place = {
-      latitude: parseFloat(arrayFilter[0].latitude),
-      longitude: parseFloat(arrayFilter[0].longtitude),
-      edit: true,
-      rua: arrayFilter[0].rua,
-      estado: arrayFilter[0].estado,
-      cidade: arrayFilter[0].cidade,
-      corMarker: arrayFilter[0].corMarker,
-      descricao: arrayFilter[0].descricao,
+    const placeFocus = {
       key: key,
+      latitude: parseFloat(arrayFilter[0].latitude),
+      longtitude: parseFloat(arrayFilter[0].longtitude),
+      rua: arrayFilter[0].rua,
+      cidade: arrayFilter[0].cidade,
+      descricao: arrayFilter[0].descricao,
+      estado: arrayFilter[0].estado,
+      corMarker: arrayFilter[0].corMarker,
     };
-    navigation.navigate('Registration', place);
+    dispatch(
+      placeActions.setPlace({
+        place: placeFocus,
+      }),
+    );
+    navigation.navigate('Registration');
   }
 
   function trocarThema() {
-    // setAppState({
-    //   ...appState,
-    //   isDarkTheme: !appState.isDarkTheme,
-    // });
     dispatch(
       appActions.setDarkTheme({
         isDarkTheme: !isDarkTheme,
@@ -166,7 +181,7 @@ export default function Home() {
       <Box style={style.vfoot}>
         <Pressable
           style={style.vbtfootleft}
-          onPress={() => navigation.navigate('Registration', {})}>
+          onPress={() => navigation.navigate('Registration')}>
           <Image source={require('../../assets/gmappoint.png')} alt="" />
         </Pressable>
         <Pressable

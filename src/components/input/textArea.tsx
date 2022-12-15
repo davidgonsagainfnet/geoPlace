@@ -1,5 +1,6 @@
 import React from 'react';
 import {Box, Text, Input} from 'native-base';
+import {useAppSelector} from '../../app/appStore';
 
 const props = {
   title: String,
@@ -16,6 +17,8 @@ export default function TextArea({
   value,
   colortext,
 }: props) {
+  const isDarkTheme = useAppSelector(state => state.app.isDarkTheme);
+  const colorTheme = isDarkTheme !== true ? '#000' : '#fff';
   return (
     <Box>
       <Text marginTop={15} fontSize={'xl'} color={colortext} bold>
@@ -31,7 +34,7 @@ export default function TextArea({
         numberOfLines={4}
         onChangeText={ChangeText}
         value={value}
-        style={{color: colortext}}
+        style={{color: colorTheme}}
       />
     </Box>
   );

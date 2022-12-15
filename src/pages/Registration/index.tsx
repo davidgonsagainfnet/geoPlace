@@ -5,15 +5,13 @@ import * as Animatable from 'react-native-animatable';
 import InputText from '../../components/input/input';
 import ButtonPerson from '../../components/button/buttonPerson';
 import TextArea from '../../components/input/textArea';
-import type {ScreenStackProps} from 'react-native-screens';
-import type {ParamListBase} from '@react-navigation/native';
 import {AppContext} from '../../app/AppContext';
 import {useNavigation} from '@react-navigation/native';
 import cep from '../../api/cep';
-import {useAppSelector} from '../../app/appStore';
+import {useAppSelector, useAppDispatch, placeActions} from '../../app/appStore';
 import InputNumber from '../../components/input/inputNumber';
 
-export default function Registration({route}: ScreenStackProps<ParamListBase>) {
+export default function Registration() {
   const {appState, setAppState} = useContext(AppContext);
   const [latitude, setLatitude] = useState('');
   const [longtitude, setLongtitude] = useState('');
@@ -33,6 +31,9 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
   const [colorThemeCard, setColorThemeCard] = useState<String>('');
   const [contrastTheme, setContrastTheme] = useState<String>('');
   const isDarkTheme = useAppSelector(state => state.app.isDarkTheme);
+  const placeFocus = useAppSelector(state => state.place.placeFocus);
+
+  const dispatch = useAppDispatch();
 
   const colorTheme = isDarkTheme === true ? '#000' : '#fff';
 
@@ -153,26 +154,48 @@ export default function Registration({route}: ScreenStackProps<ParamListBase>) {
   }
 
   useEffect(() => {
-    setLatitude(JSON.stringify(route.params.latitude, undefined, 2));
-    setLongtitude(JSON.stringify(route.params.longitude, undefined, 2));
-    if (typeof route.params.rua !== 'undefined') {
-      setRua(route.params.rua);
-      setCidade(route.params.cidade);
-      setEstado(route.params.estado);
-      setDescricao(route.params.descricao);
+    if (placeFocus.latitude !== '') {
+      setLatitude(JSON.stringify(placeFocus.latitude, undefined, 2));
+      setLongtitude(JSON.stringify(placeFocus.longtitude, undefined, 2));
+    }
+
+    if (placeFocus.rua !== '') {
+      setRua(placeFocus.rua);
+      setCidade(placeFocus.cidade);
+      setEstado(placeFocus.estado);
+      setDescricao(placeFocus.descricao);
       const cor =
-        route.params.corMarker === '#4DDEA1'
+        placeFocus.corMarker === '#4DDEA1'
           ? 'cc'
-          : route.params.corMarker === '#4D98DE'
+          : placeFocus.corMarker === '#4D98DE'
           ? 'cr'
           : 'e';
       setStatus(cor);
       setEditar(true);
-      setEditKey(route.params.key);
+      setEditKey(placeFocus.key);
     }
+    clearPlaceFocus();
     setColorThemeCard(colorTheme);
     setContrastTheme(contrastThemeLoad);
   }, []);
+
+  function clearPlaceFocus() {
+    const placeFocus = {
+      key: 0,
+      latitude: '',
+      longtitude: '',
+      rua: '',
+      cidade: '',
+      descricao: '',
+      estado: '',
+      corMarker: '',
+    };
+    dispatch(
+      placeActions.setPlace({
+        place: placeFocus,
+      }),
+    );
+  }
 
   async function buscarCep() {
     if (findCep !== '') {

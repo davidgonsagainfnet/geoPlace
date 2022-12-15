@@ -7,9 +7,10 @@ import Card from '../../components/card/card';
 import {AppContext} from '../../app/AppContext';
 import styled from 'styled-components/native';
 import {useNavigation} from '@react-navigation/native';
-import {useAppSelector} from '../../app/appStore';
+import {useAppSelector, useAppDispatch, placeActions} from '../../app/appStore';
 
 export default function MyPlace() {
+  const dispatch = useAppDispatch();
   const isDarkTheme = useAppSelector(state => state.app.isDarkTheme);
   const {appState, setAppState} = useContext(AppContext);
   const [arrayExibir, setArrayExibir] = useState<Array<any>>([]);
@@ -55,18 +56,22 @@ export default function MyPlace() {
     const arrayFilter = arrayExibir.filter(p => {
       return p.key === key;
     });
-    let place = {
-      latitude: parseFloat(arrayFilter[0].latitude),
-      longitude: parseFloat(arrayFilter[0].longtitude),
-      edit: true,
-      rua: arrayFilter[0].rua,
-      estado: arrayFilter[0].estado,
-      cidade: arrayFilter[0].cidade,
-      corMarker: arrayFilter[0].corMarker,
-      descricao: arrayFilter[0].descricao,
+    const placeFocus = {
       key: key,
+      latitude: parseFloat(arrayFilter[0].latitude),
+      longtitude: parseFloat(arrayFilter[0].longtitude),
+      rua: arrayFilter[0].rua,
+      cidade: arrayFilter[0].cidade,
+      descricao: arrayFilter[0].descricao,
+      estado: arrayFilter[0].estado,
+      corMarker: arrayFilter[0].corMarker,
     };
-    navigation.navigate('Registration', place);
+    dispatch(
+      placeActions.setPlace({
+        place: placeFocus,
+      }),
+    );
+    navigation.navigate('Registration');
   }
 
   function filtro(fil) {

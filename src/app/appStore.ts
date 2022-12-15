@@ -1,15 +1,15 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {useDispatch, useSelector, TypedUseSelectorHook} from 'react-redux';
 export {Provider as AppStoreProvider} from 'react-redux';
-import {appReducer} from './appSlice';
-import {coordReducer} from '../slice/coordSlice';
-export {appActions} from './appSlice';
-export {coordActions} from '../slice/coordSlice';
+import {appReducer} from '../slice/appSlice';
+import {placeReducer} from '../slice/placeSlice';
+export {appActions} from '../slice/appSlice';
+export {placeActions} from '../slice/placeSlice';
 
 export const appStore = configureStore({
   reducer: {
     app: appReducer,
-    coord: coordReducer,
+    place: placeReducer,
   },
   devTools: true,
 });
