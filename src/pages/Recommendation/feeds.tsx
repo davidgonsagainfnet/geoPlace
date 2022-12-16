@@ -6,9 +6,78 @@ import {FeedCard, FeedCardProps} from '../../components/card/FeedCard';
 import {AppContext} from '../../app/AppContext';
 import styled from 'styled-components/native';
 import {useNavigation} from '@react-navigation/native';
-import {useAppSelector} from '../../app/appStore';
+import {placeActions, useAppDispatch, useAppSelector} from '../../app/appStore';
+import {useQuery, gql} from '../../components/apollo/apolloClient';
+
+type FeedCardProps = {
+  latitude: string;
+  longitude: string;
+  rua: string;
+  cidade: string;
+  descricao: string;
+  estado: string;
+  corMarker: string;
+  image: string;
+  createdAt: string;
+};
+
+function feedDecoder(data: any): FeedCardProps[] {
+  if (data === undefined) {
+    return [];
+  }
+
+  const {data: indicatedPlaces} = data.indicatedPlaces;
+  const items = indicatedPlaces.map(
+    ({
+      attributes: {
+        latitude,
+        longitude,
+        rua,
+        cidade,
+        descricao,
+        estado,
+        corMarker,
+        image,
+        createdAt,
+      },
+    }: any) => ({
+      latitude,
+      longitude,
+      rua,
+      cidade,
+      descricao,
+      estado,
+      corMarker,
+      image: `${image}?param=${Math.random()}`,
+      createdAt,
+    }),
+  );
+
+  return items;
+}
 
 export default function Feeds() {
+  const dispatch = useAppDispatch();
+  const {data, loading} = useQuery(gql`
+    query {
+      indicatedPlaces {
+        data {
+          attributes {
+            latitude
+            longitude
+            rua
+            cidade
+            descricao
+            estado
+            corMarker
+            image
+            createdAt
+          }
+        }
+      }
+    }
+  `);
+
   const isDarkTheme = useAppSelector(state => state.app.isDarkTheme);
   const {appState, setAppState} = useContext(AppContext);
   const [arrayExibir, setArrayExibir] = useState<Array<any>>([]);
@@ -37,13 +106,25 @@ export default function Feeds() {
   );
 
   function openFeed(item: FeedCardProps) {
-    const place = {
-      latitude: parseFloat(item.lat),
-      longitude: parseFloat(item.long),
-      edit: false,
+    const placeFocus = {
+      key: 0,
+      latitude: item.latitude,
+      longtitude: item.longitude,
+      rua: item.rua,
+      cidade: item.cidade,
+      descricao: item.descricao,
+      estado: item.estado,
+      corMarker: item.corMarker,
     };
-    navigation.navigate('Registration', place);
+    dispatch(
+      placeActions.setPlace({
+        place: placeFocus,
+      }),
+    );
+    navigation.navigate('Registration');
   }
+
+  const respConvertAPI = feedDecoder(data);
 
   return (
     <Box style={styles.container}>
@@ -75,13 +156,19 @@ export default function Feeds() {
           Indicações de Lugares
         </Text>
         <FlatList
-          data={cardList}
+          data={respConvertAPI}
           renderItem={({item}) => (
             <Pressable
               onPress={() => {
                 openFeed(item);
               }}>
-              <FeedCard imageSrc={item.imageSrc} colorText={contrastTheme} />
+              <FeedCard
+                imageSrc={item.image}
+                colorText={contrastTheme}
+                descricao={item.descricao}
+                data={item.createdAt}
+                cidade={item.cidade}
+              />
             </Pressable>
           )}
         />
