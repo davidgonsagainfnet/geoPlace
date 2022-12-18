@@ -7,6 +7,7 @@ import {AppContext, initialAppState} from './src/app/AppContext';
 import Loader from './src/components/loader/loader';
 import {NativeBaseProvider} from 'native-base';
 import {appActions, useAppDispatch, useAppSelector} from './src/app/appStore';
+import messaging from '@react-native-firebase/messaging';
 
 function delay(seconds: number) {
   return new Promise(resolve => {
@@ -27,6 +28,7 @@ export function AppContainner() {
   const isLoading = useAppSelector(state => state.app.isLoading);
 
   useEffect(() => {
+    messaging().getToken().then(console.log);
     dispatch(
       appActions.setDarkTheme({
         isDarkTheme: Appearance.getColorScheme() === 'dark',
