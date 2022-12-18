@@ -13,7 +13,12 @@ import {FeedCard, FeedCardProps} from '../../components/card/FeedCard';
 import {AppContext} from '../../app/AppContext';
 import styled from 'styled-components/native';
 import {useNavigation} from '@react-navigation/native';
-import {placeActions, useAppDispatch, useAppSelector} from '../../app/appStore';
+import {
+  placeActions,
+  useAppDispatch,
+  useAppSelector,
+  recommendationActions,
+} from '../../app/appStore';
 import {useLazyQuery} from '../../components/apollo/apolloClient';
 import {getPlacePage} from '../../queries/getPlacePage';
 
@@ -84,7 +89,9 @@ export default function Feeds() {
   const contrastTheme = useContrastText(colorTheme);
 
   const [page, setPage] = useState(1);
-  const [place, setPlace] = useState([] as FeedCardProps[]);
+  //const [place, setPlace] = useState([] as FeedCardProps[]);
+
+  const place = useAppSelector(state => state.recommendation.recommendation);
 
   const [funPlacePage, {loading}] = useLazyQuery(getPlacePage, {
     fetchPolicy: 'no-cache',
@@ -100,7 +107,12 @@ export default function Feeds() {
         },
       });
       const respConvertAPI = feedDecoder(data);
-      setPlace(respConvertAPI);
+      //setPlace(respConvertAPI);
+      dispatch(
+        recommendationActions.setRecommendation({
+          recommendation: respConvertAPI,
+        }),
+      );
     });
 
     return unsubscribe;
@@ -160,7 +172,12 @@ export default function Feeds() {
     }
 
     setPage(nextPage);
-    setPlace([...place, ...respConvertAPI]);
+    //setPlace([...place, ...respConvertAPI]);
+    dispatch(
+      recommendationActions.addRecommendation({
+        recommendation: respConvertAPI,
+      }),
+    );
   }
 
   return (
