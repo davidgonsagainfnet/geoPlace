@@ -1,13 +1,21 @@
 import React, {useEffect, useState, useContext} from 'react';
 import {StyleSheet, FlatList} from 'react-native';
-import {Box, Text, useContrastText, Pressable} from 'native-base';
+import {
+  Box,
+  Text,
+  useContrastText,
+  Pressable,
+  Spinner,
+  Center,
+} from 'native-base';
 import * as Animatable from 'react-native-animatable';
 import {FeedCard, FeedCardProps} from '../../components/card/FeedCard';
 import {AppContext} from '../../app/AppContext';
 import styled from 'styled-components/native';
 import {useNavigation} from '@react-navigation/native';
 import {placeActions, useAppDispatch, useAppSelector} from '../../app/appStore';
-import {useQuery, gql} from '../../components/apollo/apolloClient';
+import {useLazyQuery} from '../../components/apollo/apolloClient';
+import {getPlacePage} from '../../queries/getPlacePage';
 
 type FeedCardProps = {
   latitude: string;
@@ -56,33 +64,17 @@ function feedDecoder(data: any): FeedCardProps[] {
   return items;
 }
 
+const pageSize = 6;
+
 export default function Feeds() {
   const dispatch = useAppDispatch();
-  const {data, loading} = useQuery(gql`
-    query {
-      indicatedPlaces {
-        data {
-          attributes {
-            latitude
-            longitude
-            rua
-            cidade
-            descricao
-            estado
-            corMarker
-            image
-            createdAt
-          }
-        }
-      }
-    }
-  `);
 
   const isDarkTheme = useAppSelector(state => state.app.isDarkTheme);
   const {appState, setAppState} = useContext(AppContext);
   const [arrayExibir, setArrayExibir] = useState<Array<any>>([]);
   const [colorThemeCard, setColorThemeCard] = useState<String>('');
   const navigation = useNavigation();
+  const [endReached, setEndReached] = useState(false);
 
   const SpaceCard = styled.View`
     margin: 10px;
@@ -90,6 +82,29 @@ export default function Feeds() {
   const colorTheme = isDarkTheme === true ? '#000' : '#fff';
 
   const contrastTheme = useContrastText(colorTheme);
+
+  const [page, setPage] = useState(1);
+  const [place, setPlace] = useState([] as FeedCardProps[]);
+
+  const [funPlacePage, {loading}] = useLazyQuery(getPlacePage, {
+    fetchPolicy: 'no-cache',
+  });
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      const nextPage = 1;
+      const {data} = await funPlacePage({
+        variables: {
+          pageSize,
+          page: nextPage,
+        },
+      });
+      const respConvertAPI = feedDecoder(data);
+      setPlace(respConvertAPI);
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   useEffect(() => {
     setArrayExibir(appState.markers);
@@ -124,7 +139,29 @@ export default function Feeds() {
     navigation.navigate('Registration');
   }
 
-  const respConvertAPI = feedDecoder(data);
+  async function onEndReached() {
+    if (loading || endReached) {
+      return;
+    }
+
+    const nextPage = page + 1;
+
+    const {data} = await funPlacePage({
+      variables: {
+        pageSize,
+        page: nextPage,
+      },
+    });
+
+    const respConvertAPI = feedDecoder(data);
+
+    if (respConvertAPI.length < pageSize) {
+      setEndReached(true);
+    }
+
+    setPage(nextPage);
+    setPlace([...place, ...respConvertAPI]);
+  }
 
   return (
     <Box style={styles.container}>
@@ -156,7 +193,7 @@ export default function Feeds() {
           Indicações de Lugares
         </Text>
         <FlatList
-          data={respConvertAPI}
+          data={place}
           renderItem={({item}) => (
             <Pressable
               onPress={() => {
@@ -171,7 +208,13 @@ export default function Feeds() {
               />
             </Pressable>
           )}
+          onEndReached={onEndReached}
         />
+        {loading && (
+          <Center>
+            <Spinner size="lg" />
+          </Center>
+        )}
       </Animatable.View>
     </Box>
   );
