@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react';
 import {StyleSheet, Alert} from 'react-native';
-import {Box, Text, ScrollView, useContrastText} from 'native-base';
+import {Box, Text, ScrollView, useContrastText, useToast} from 'native-base';
 import * as Animatable from 'react-native-animatable';
 import InputText from '../../components/input/input';
 import ButtonPerson from '../../components/button/buttonPerson';
@@ -10,6 +10,8 @@ import {useNavigation} from '@react-navigation/native';
 import cep from '../../api/cep';
 import {useAppSelector, useAppDispatch, placeActions} from '../../app/appStore';
 import InputNumber from '../../components/input/inputNumber';
+import {useMutation} from '../../components/apollo/apolloClient';
+import {mutationCreatePost} from '../../queries/mutationCreatePost';
 
 export default function Registration() {
   const {appState, setAppState} = useContext(AppContext);
@@ -32,6 +34,8 @@ export default function Registration() {
   const [contrastTheme, setContrastTheme] = useState<String>('');
   const isDarkTheme = useAppSelector(state => state.app.isDarkTheme);
   const placeFocus = useAppSelector(state => state.place.placeFocus);
+  const [createPost, {loading}] = useMutation(mutationCreatePost);
+  const toast = useToast();
 
   const dispatch = useAppDispatch();
 
@@ -59,7 +63,7 @@ export default function Registration() {
     }
   }
 
-  function salvar() {
+  async function salvar() {
     if (cidade === '') {
       Alert.alert('Error', 'Informe a cidade', [
         {text: 'OK', onPress: () => console.log('OK Pressed')},
@@ -102,6 +106,33 @@ export default function Registration() {
         {text: 'OK', onPress: () => console.log('OK Pressed')},
       ]);
       return;
+    }
+
+    if (corMarker === '#4DDEA1') {
+      const {errors} = await createPost({
+        variables: {
+          latitude: latitude,
+          longitude: longtitude,
+          rua: rua,
+          cidade: cidade,
+          descricao: descricao,
+          estado: estado,
+          corMarker: corMarker,
+          image: 'https://loremflickr.com/g/320/160/thailand/all',
+        },
+      });
+
+      if (errors) {
+        toast.show({
+          description: 'Erro na publicação do post',
+          backgroundColor: 'error.500',
+        });
+      } else {
+        toast.show({
+          description: 'Publicado com Sucesso',
+          backgroundColor: 'success.500',
+        });
+      }
     }
 
     const arrayOriginal = appState.markers;
@@ -155,8 +186,12 @@ export default function Registration() {
 
   useEffect(() => {
     if (placeFocus.latitude !== '') {
-      setLatitude(JSON.stringify(placeFocus.latitude, undefined, 2));
-      setLongtitude(JSON.stringify(placeFocus.longtitude, undefined, 2));
+      setLatitude(
+        JSON.stringify(parseFloat(placeFocus.latitude), undefined, 2),
+      );
+      setLongtitude(
+        JSON.stringify(parseFloat(placeFocus.longtitude), undefined, 2),
+      );
     }
 
     if (placeFocus.rua !== '') {
